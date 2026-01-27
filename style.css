@@ -1,0 +1,65 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Nunito Sans", sans-serif;
+}
+
+.main-container {
+  max-width: 550px;
+  margin: 40px auto;
+  background-color: turquoise;
+}
+.intro {
+  max-width: 400px;
+  margin: 40px auto;
+  /* background-color: turquoise; */
+  /* text-align: center; */
+  padding: 50px;
+}
+.contact {
+  text-decoration: none;
+  font-weight: bolder;
+  font-size: 1em;
+  border: 1px solid black;
+  border-radius: 25px;
+  padding: 1px 2%;
+  display: flex;
+  max-width: fit-content;
+  background-color: black;
+  color: turquoise;
+}
+.cv {
+  text-decoration: none;
+  font-weight: bolder;
+  font-size: 1em;
+  border: 1px solid turquoise;
+  border-radius: 25px;
+  padding: 1px 2%;
+  display: flex;
+  max-width: fit-content;
+  color: black;
+}
+.socials {
+  margin: 10px auto 30px;
+}
+.socials a {
+  text-decoration: none;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  /* background-color: brown; */
+}
+.card {
+  max-width: 200px;
+  margin: 40px auto;
+  background-color: black;
+  text-align: center;
+  color: turquoise;
+}
+.card img {
+  max-width: 200px;
+}
