@@ -10,7 +10,9 @@ function navigateTo(page) {
   // Go to the page
   window.location.href = pages[page] || "HomePage.html";
 }
+
 // input.js
+
 // input receiver
 const addproject = document.getElementById("addproject");
 const userlist = document.getElementById("userlist");
