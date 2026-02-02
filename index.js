@@ -14,38 +14,39 @@ function navigateTo(page) {
 // input receiver
 const addproject = document.getElementById("addproject");
 const userlist = document.getElementById("userlist");
+// conditional page check
+if (addproject && userlist) {
+  // temp memory
+  let projects = [];
+  // event submit form
+  addproject.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-// temp memory
-let projects = [];
-// event submit form
-addproject.addEventListener("submit", function (e) {
-  e.preventDefault();
+    let projectname = document.getElementById("ProjectName").value;
+    let start = document.getElementById("start-date").value;
+    let end = document.getElementById("end-date").value;
+    let desc = document.getElementById("description").value;
 
-  let projectname = document.getElementById("ProjectName").value;
-  let start = document.getElementById("start-date").value;
-  let end = document.getElementById("end-date").value;
-  let desc = document.getElementById("description").value;
+    const project = { projectname, start, end, desc };
+    projects.push(project);
+    console.log(projects);
 
-  const project = { projectname, start, end, desc };
-  projects.push(project);
-  console.log(projects);
+    changeElement();
+    renderUsers();
+  });
 
-  changeElement();
-  renderUsers();
-});
+  // Header change
+  function changeElement(parameters) {
+    document.getElementById(
+      "input-user"
+    ).innerHTML = `<p>New project has been added!!</p>`;
+  }
 
-// Header change
-function changeElement(parameters) {
-  document.getElementById(
-    "input-user"
-  ).innerHTML = `<p>New project has been added!!</p>`;
-}
+  function renderUsers(parameters) {
+    userlist.innerHTML = "";
 
-function renderUsers(parameters) {
-  userlist.innerHTML = "";
-
-  for (let i = 0; i < projects.length; i++) {
-    userlist.innerHTML += `
+    for (let i = 0; i < projects.length; i++) {
+      userlist.innerHTML += `
     <div class="Project p-2 mb-3">
     <h5>Project : ${projects[i].projectname}</h5>
     <h5>
@@ -58,5 +59,6 @@ function renderUsers(parameters) {
       </span>
     </h5>
   </div>`;
+    }
   }
 }
