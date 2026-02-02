@@ -104,15 +104,153 @@
     </nav>
 
     <div class="main-container col w-75 p-4">
-      <div class="mb-3 form-field w-100">
-        <label for="ProjectName" class="form-label">Project Name</label>
-        <input
-          type="text"
-          class="form-control"
-          id="ProjectName"
-          placeholder="Enter project name"
-        />
+      <div class="contact-header w-100 text-center mb-3">
+        <h1 class="fw-bolder">ADD MY PROJECT</h1>
+        <p id="input-user">Please fill out the form below to add new project</p>
       </div>
+      <form class="form-field w-100 mb-3" id="addproject">
+        <!-- ProjectName -->
+        <div class="mb-3">
+          <label for="ProjectName" class="form-label">Project Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="ProjectName"
+            placeholder="Enter project name"
+          />
+        </div>
+        <!-- date-range -->
+        <div class="row mb-3">
+          <div class="col">
+            <label for="start-date" class="form-label">Start Date</label>
+            <input
+              type="date"
+              id="start-date"
+              name="start-date"
+              class="form-control"
+            />
+          </div>
+          <div class="col">
+            <label for="end-date" class="form-label">End Date</label>
+            <input
+              type="date"
+              id="end-date"
+              name="end-date"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <!-- projects description -->
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            id="description"
+            class="form-control"
+            name="description"
+            rows="5"
+            placeholder="Describe your project here..."
+          ></textarea>
+        </div>
+        <!-- Technologies(Checklist) -->
+        <div class="mb-3">
+          <label for="technologies" class="form-label">Technologies</label>
+          <div class="row d-flex">
+            <!-- nodejs -->
+            <div class="col-lg-3 col-md-6">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="nodejscheck"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Node Js
+                </label>
+              </div>
+            </div>
+            <!-- reactjs -->
+            <div class="col-lg-3 col-md-6">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="reactjscheck"
+                />
+                <label class="form-check-label" for="checkDefault">
+                  React Js
+                </label>
+              </div>
+            </div>
+            <!-- NextJS -->
+            <div class="col-lg-3 col-md-6">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="nextjscheck"
+                />
+                <label class="form-check-label" for="checkChecked">
+                  Next Js
+                </label>
+              </div>
+            </div>
+            <!-- TypeScript -->
+            <div class="col-lg-3 col-md-6">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="typescriptcheck"
+                />
+                <label class="form-check-label" for="checkChecked">
+                  TypeScript
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Upload Image -->
+        <div class="mb-3">
+          <label for="image-upload" class="form-label">Upload Image</label>
+          <input
+            class="form-control input-group-text"
+            type="file"
+            id="upload-area"
+            multiple
+          />
+        </div>
+        <!-- Submit Button -->
+        <div class="form-submit text-center mb-3">
+          <button type="submit" class="submit-btn btn btn-primary">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- My Project -->
+    <div class="main-container w-75 p-3">
+      <h1 class="fw-bolder">MY PROJECT</h1>
+      <div class="Project p-2 mb-3">
+        <h5>Project : Dumbways Webs</h5>
+        <h5>
+          Duration : <span><h5>2026-01-26 => 2026-02-01</h5></span>
+        </h5>
+        <h5>
+          Project description:
+          <span
+            ><p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum,
+              accusantium modi possimus itaque doloribus corporis soluta facilis
+              sit illum quaerat vel nemo voluptates! Cum, suscipit?
+            </p>
+          </span>
+        </h5>
+      </div>
+      <div id="userlist"></div>
     </div>
     <footer class="text-center fw-bold">Narusaka@2026</footer>
     <!-- JavaScript Files -->

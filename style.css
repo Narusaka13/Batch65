@@ -26,7 +26,7 @@ body {
   flex-wrap: wrap;
   background-color: turquoise;
   /* border: 1px solid red; */
-  justify-content: space-evenly;
+  justify-content: center;
   margin: 10px auto;
   /* gap: 10px; */
   border-radius: 10px;
@@ -101,4 +101,10 @@ body {
   object-fit: cover;
   padding: 0px;
   /* object-position: center ; */
+}
+
+/* MyProjectPage */
+.Project {
+  border: 1px solid black;
+  border-radius: 5px;
 }
