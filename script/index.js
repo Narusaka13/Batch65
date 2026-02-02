@@ -28,8 +28,17 @@ if (addproject && userlist) {
     let start = document.getElementById("start-date").value;
     let end = document.getElementById("end-date").value;
     let desc = document.getElementById("description").value;
+    // Get selected technologies from checkboxes
+    let techCheckboxes = document.querySelectorAll(
+      'input[type="checkbox"]:checked'
+    );
 
-    const project = { projectname, start, end, desc };
+    let tech = [];
+    for (let i = 0; i < techCheckboxes.length; i++) {
+      const checkbox = techCheckboxes[i];
+      tech.push(checkbox.value);
+    }
+    const project = { projectname, start, end, desc, technologies: tech };
     projects.push(project);
     console.log(projects);
 
