@@ -108,3 +108,9 @@ body {
   border: 1px solid black;
   border-radius: 5px;
 }
+.badge {
+  font-size: 0.85em;
+  padding: 5px 10px;
+  border-radius: 12px;
+  display: inline-block;
+}

@@ -54,24 +54,29 @@ if (addproject && userlist) {
   }
 
   function renderUsers(parameters) {
-    userlist.innerHTML = "";
-
     for (let i = 0; i < projects.length; i++) {
-      userlist.innerHTML += `
-      <div class="card Project" style="width: 19rem">
-      <img src="..." class="card-img-top" alt="..." />
+      // Create technology badges
+      let techBadges = "";
+      if (projects[i].technologies && projects[i].technologies.length > 0) {
+        techBadges = projects[i].technologies
+          .map((tech) => `<span class="badge bg-success me-1">${tech}</span>`)
+          .join("");
+      }
+      // Create the card HTML
+      const projectCard = `
+    <div class="card Project" style="max-width: 19rem">
+      <img src="..." class="card-img-top" alt="Project image" />
       <div class="card-body">
-        <h5 class="card-title">Dumbways Web</h5>
-        <p class="card-text fw-lighter fs-6 mb-0">2026-01-26 => 2026-02-01</p>
-        <p class="card-text">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum,
-          accusantium modi possimus itaque doloribus corporis soluta facilis
-          sit illum quaerat vel nemo voluptates! Cum, suscipit?
-        </p>
+        <h5 class="card-title">${projects[i].projectname}</h5>
+        <p class="card-text fw-lighter fs-6 mb-0">${projects[i].start} => ${projects[i].end}</p>
+        <p class="card-text fw-light mb-2">${techBadges}</p>
+        <p class="card-text">${projects[i].desc}</p>
         <a href="#" class="btn btn-success">Learn More!</a>
       </div>
     </div>
   `;
+      // Add to the END of userlist (after placeholders)
+      userlist.innerHTML += projectCard;
     }
   }
 }
