@@ -58,18 +58,20 @@ if (addproject && userlist) {
 
     for (let i = 0; i < projects.length; i++) {
       userlist.innerHTML += `
-    <div class="Project p-2 mb-3">
-    <h5>Project : ${projects[i].projectname}</h5>
-    <h5>
-      Duration : <span><h5>${projects[i].start} => ${projects[i].end}</h5></span>
-    </h5>
-    <h5>
-      Project description:
-      <span>
-        <p>${projects[i].desc}</p>
-      </span>
-    </h5>
-  </div>`;
+      <div class="card Project" style="width: 19rem">
+      <img src="..." class="card-img-top" alt="..." />
+      <div class="card-body">
+        <h5 class="card-title">Dumbways Web</h5>
+        <p class="card-text fw-lighter fs-6 mb-0">2026-01-26 => 2026-02-01</p>
+        <p class="card-text">
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum,
+          accusantium modi possimus itaque doloribus corporis soluta facilis
+          sit illum quaerat vel nemo voluptates! Cum, suscipit?
+        </p>
+        <a href="#" class="btn btn-success">Learn More!</a>
+      </div>
+    </div>
+  `;
     }
   }
 }
