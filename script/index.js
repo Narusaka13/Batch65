@@ -25,8 +25,11 @@ const userlist = document.getElementById("userlist");
 if (addproject && userlist) {
   // Add counter for unique IDs
   // let projectId = 1;
-  // temp memory
-  let projects = [];
+  // Load projects from localStorage OR start with empty array
+  let projects = JSON.parse(localStorage.getItem("projects")) || [];
+  if (projects.length > 0) {
+    renderUsers();
+  }
   // event submit form
   addproject.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -53,10 +56,14 @@ if (addproject && userlist) {
       desc,
       technologies: tech,
     };
+
+    // Add to the array
     projects.push(project);
+    // Save to localStorage
+    localStorage.setItem("projects", JSON.stringify(projects));
     // Check data input to array;
     console.log(projects);
-
+    // Update UI
     changeElement();
     renderUsers();
   });
@@ -69,8 +76,11 @@ if (addproject && userlist) {
   }
 
   function renderUsers(parameters) {
-    // Clear the container first
-    userlist.innerHTML = "";
+    // Remove only non-placeholder cards
+    const dynamicCards = userlist.querySelectorAll(
+      ".card.Project:not([data-placeholder])"
+    );
+    dynamicCards.forEach((card) => card.remove());
     for (let i = 0; i < projects.length; i++) {
       // Create technology badges
       let techBadges = "";
@@ -81,13 +91,13 @@ if (addproject && userlist) {
       }
       // Create the card HTML
       const projectCard = `
-    <div class="card Project" style="max-width: 19rem">
+    <div class="card Project col-md-6 col-lg-4" style="max-width: 19rem">
       <img src="..." class="card-img-top" alt="Project image" />
       <div class="card-body">
         <h5 class="card-title">${projects[i].projectname}</h5>
         <p class="card-text fw-lighter fs-6 mb-0">${projects[i].start} => ${projects[i].end}</p>
         <p class="card-text fw-light mb-2">${techBadges}</p>
-        <p class="card-text">${projects[i].desc}</p>
+        <p class="card-text text-truncate">${projects[i].desc}</p>
         <a href="./Detailpage.html?id=1" class="btn btn-success"
               >Learn More!</a
             >
