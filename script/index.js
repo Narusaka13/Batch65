@@ -1,6 +1,6 @@
 // navigation.js
 
-function navigateTo(page) {
+function navigateTo(page, projectId = null) {
   // Map pages URLs
   const pages = {
     home: "homepage.html",
@@ -24,7 +24,7 @@ const userlist = document.getElementById("userlist");
 // conditional page check
 if (addproject && userlist) {
   // Add counter for unique IDs
-  // let projectId = 1;
+  let projectId = 1;
   // Load projects from localStorage OR start with empty array
   let projects = JSON.parse(localStorage.getItem("projects")) || [];
   if (projects.length > 0) {
@@ -49,7 +49,7 @@ if (addproject && userlist) {
     }
     // Create project object WITH ID
     const project = {
-      // id: projectId++,
+      id: projectId++,
       projectname,
       start,
       end,
@@ -98,9 +98,9 @@ if (addproject && userlist) {
         <p class="card-text fw-lighter fs-6 mb-2">${projects[i].start} => ${projects[i].end}</p>
         <p class="card-text fw-light mb-2">${techBadges}</p>
         <p class="card-text text-truncate">${projects[i].desc}</p>
-        <a href="./Detailpage.html?id=1" class="btn btn-success"
-              >Learn More!</a
-            >
+        <button onclick="navigateTo('detail', ${projects[i].id})" class="btn btn-success">
+              Learn More!
+            </button>
       </div>
     </div>
   `;
