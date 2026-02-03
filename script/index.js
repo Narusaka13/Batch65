@@ -95,7 +95,7 @@ if (addproject && userlist) {
       <img src="..." class="card-img-top" alt="Project image" />
       <div class="card-body">
         <h5 class="card-title">${projects[i].projectname}</h5>
-        <p class="card-text fw-lighter fs-6 mb-0">${projects[i].start} => ${projects[i].end}</p>
+        <p class="card-text fw-lighter fs-6 mb-2">${projects[i].start} => ${projects[i].end}</p>
         <p class="card-text fw-light mb-2">${techBadges}</p>
         <p class="card-text text-truncate">${projects[i].desc}</p>
         <a href="./Detailpage.html?id=1" class="btn btn-success"
