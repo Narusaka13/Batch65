@@ -6,9 +6,14 @@ function navigateTo(page) {
     home: "homepage.html",
     projects: "MyProjectpage.html",
     contact: "Contactpage.html",
+    detail: "Detailpage.html",
   };
-  // Go to the page
-  window.location.href = pages[page] || "HomePage.html";
+  // Go to the page with navigating to detail page
+  if (page === "detail" && projectId) {
+    window.location.href = `${pages.detail}?id=${projectId}`;
+  } else {
+    window.location.href = pages[page] || "HomePage.html";
+  }
 }
 
 // input.js
@@ -18,6 +23,8 @@ const addproject = document.getElementById("addproject");
 const userlist = document.getElementById("userlist");
 // conditional page check
 if (addproject && userlist) {
+  // Add counter for unique IDs
+  // let projectId = 1;
   // temp memory
   let projects = [];
   // event submit form
@@ -32,14 +39,22 @@ if (addproject && userlist) {
     let techCheckboxes = document.querySelectorAll(
       'input[type="checkbox"]:checked'
     );
-
     let tech = [];
     for (let i = 0; i < techCheckboxes.length; i++) {
       const checkbox = techCheckboxes[i];
       tech.push(checkbox.value);
     }
-    const project = { projectname, start, end, desc, technologies: tech };
+    // Create project object WITH ID
+    const project = {
+      // id: projectId++,
+      projectname,
+      start,
+      end,
+      desc,
+      technologies: tech,
+    };
     projects.push(project);
+    // Check data input to array;
     console.log(projects);
 
     changeElement();
@@ -54,6 +69,8 @@ if (addproject && userlist) {
   }
 
   function renderUsers(parameters) {
+    // Clear the container first
+    userlist.innerHTML = "";
     for (let i = 0; i < projects.length; i++) {
       // Create technology badges
       let techBadges = "";
@@ -71,7 +88,9 @@ if (addproject && userlist) {
         <p class="card-text fw-lighter fs-6 mb-0">${projects[i].start} => ${projects[i].end}</p>
         <p class="card-text fw-light mb-2">${techBadges}</p>
         <p class="card-text">${projects[i].desc}</p>
-        <a href="#" class="btn btn-success">Learn More!</a>
+        <a href="./Detailpage.html?id=1" class="btn btn-success"
+              >Learn More!</a
+            >
       </div>
     </div>
   `;
@@ -79,4 +98,21 @@ if (addproject && userlist) {
       userlist.innerHTML += projectCard;
     }
   }
+  // function displayProjectDetail(project) {
+  //   // Update page elements
+  //   document.getElementById("projectName").textContent = project.projectname;
+  //   document.getElementById("date").textContent = `${project.start} - ${project.end}`;
+  //   document.getElementById("description").textContent = project.desc;
+
+  //   // Set image (use placeholder if none)
+  //   const imageEl = document.getElementById("image");
+  //   imageEl.src = project.image || "https://placehold.co/600x400";
+  //   imageEl.alt = project.projectname;
+
+  //   // Create technology badges
+  //   const techBadges = project.technologies
+  //     .map(tech => `<span class="badge bg-success me-1">${tech}</span>`)
+  //     .join("");
+  //   document.getElementById("technologies").innerHTML = techBadges;
+  // }
 }
