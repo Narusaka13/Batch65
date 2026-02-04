@@ -28,6 +28,9 @@ if (addproject && userlist) {
   // Load projects from localStorage OR start with empty array
   let projects = JSON.parse(localStorage.getItem("projects")) || [];
   if (projects.length > 0) {
+    // Find the maximum ID in existing projects
+    const storeId = Math.max(...projects.map((project) => project.id));
+    projectId = storeId + 1;
     renderUsers();
   }
   // event submit form
