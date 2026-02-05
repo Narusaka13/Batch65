@@ -1,5 +1,4 @@
-// navigation.js
-
+// ============ LOGIC FOR navigation.js ============//
 function navigateTo(page, projectId = null) {
   // Map pages URLs
   const pages = {
@@ -16,8 +15,7 @@ function navigateTo(page, projectId = null) {
   }
 }
 
-// input.js
-
+// ============ LOGIC FOR input.js ============ //
 // input receiver
 const addproject = document.getElementById("addproject");
 const userlist = document.getElementById("userlist");
@@ -45,11 +43,7 @@ if (addproject && userlist) {
     let techCheckboxes = document.querySelectorAll(
       'input[type="checkbox"]:checked'
     );
-    let tech = [];
-    for (let i = 0; i < techCheckboxes.length; i++) {
-      const checkbox = techCheckboxes[i];
-      tech.push(checkbox.value);
-    }
+    let tech = Array.from(techCheckboxes).map((checkbox) => checkbox.value);
     // Create project object WITH ID
     const project = {
       id: projectId++,
@@ -58,6 +52,8 @@ if (addproject && userlist) {
       end,
       desc,
       technologies: tech,
+      image:
+        "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
     };
 
     // Add to the array
@@ -71,19 +67,20 @@ if (addproject && userlist) {
     renderUsers();
   });
 
-  // Header change
-  function changeElement(parameters) {
+  // Header change //
+  function changeElement() {
     document.getElementById(
       "input-user"
     ).innerHTML = `<p>New project has been added!!</p>`;
   }
 
-  function renderUsers(parameters) {
+  function renderUsers() {
     // Remove only non-placeholder cards
     const dynamicCards = userlist.querySelectorAll(
       ".card.Project:not([data-placeholder])"
     );
     dynamicCards.forEach((card) => card.remove());
+    // Create project cards
     for (let i = 0; i < projects.length; i++) {
       // Create technology badges
       let techBadges = "";
@@ -92,6 +89,7 @@ if (addproject && userlist) {
           .map((tech) => `<span class="badge bg-success me-1">${tech}</span>`)
           .join("");
       }
+
       // Create the card HTML
       const projectCard = `
     <div class="card Project col-md-6 col-lg-4" style="max-width: 19rem">
@@ -111,21 +109,72 @@ if (addproject && userlist) {
       userlist.innerHTML += projectCard;
     }
   }
-  // function displayProjectDetail(project) {
-  //   // Update page elements
-  //   document.getElementById("projectName").textContent = project.projectname;
-  //   document.getElementById("date").textContent = `${project.start} - ${project.end}`;
-  //   document.getElementById("description").textContent = project.desc;
+}
 
-  //   // Set image (use placeholder if none)
-  //   const imageEl = document.getElementById("image");
-  //   imageEl.src = project.image || "https://placehold.co/600x400";
-  //   imageEl.alt = project.projectname;
+// ============ LOGIC FOR detail.js ============//
+const container = document.getElementById("container");
+if (container) {
+  const projectName = document.getElementById("projectName");
+  const image = document.getElementById("image");
+  const date = document.getElementById("date");
+  const technologies = document.getElementById("technologies");
+  const description = document.getElementById("description");
 
-  //   // Create technology badges
-  //   const techBadges = project.technologies
-  //     .map(tech => `<span class="badge bg-success me-1">${tech}</span>`)
-  //     .join("");
-  //   document.getElementById("technologies").innerHTML = techBadges;
-  // }
+  const fillData = function (project) {
+    const technologiesData = project.technologies
+      .map((tech) => `<span class="badge bg-success me-1">${tech}</span>`)
+      .join("");
+
+    projectName.innerText = project.projectname;
+    image.src = project.image || "https://placehold.co/600x400";
+    date.innerText = `${project.start} - ${project.end}`;
+    technologies.innerHTML = technologiesData;
+    description.innerText = project.desc;
+  };
+  // Function to prepare and load data
+  const prepareData = function () {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (!id) {
+      container.innerHTML = `
+          <div class="alert alert-danger">
+            <h4>Id is not found</h4>
+            <p>Id not included in URL</p>
+            <a href="MyProjectpage.html" class="btn btn-primary">Back to Projects</a>
+          </div>
+        `;
+      return;
+    }
+
+    const result = localStorage.getItem("projects");
+    if (!result) {
+      container.innerHTML = `
+        <div class="alert alert-danger">
+        <h4>No projects found</h4>
+        <p>No projects data in localStorage</p>
+        <a href="MyProjectpage.html" class="btn btn-primary">Back to Projects</a>
+      </div>
+    `;
+      return;
+    }
+
+    const data = JSON.parse(result);
+    const project = data.find((d) => d.id === Number(id));
+
+    if (project) {
+      fillData(project);
+    } else {
+      container.innerHTML = `
+      <div class="alert alert-danger">
+        <h4>Data is not found</h4>
+        <p>Project with id ${id} not found</p>
+        <a href="MyProjectpage.html" class="btn btn-primary">Back to Projects</a>
+      </div>
+    `;
+    }
+  };
+
+  // Run on page load
+  prepareData();
 }
