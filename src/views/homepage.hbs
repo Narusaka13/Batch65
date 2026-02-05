@@ -106,7 +106,13 @@
           accusantium odio excepturi quidem dolore porro iste at? Odit quisquam
           officiis aut ipsam.
         </p>
-        <a href="#" class="contact">CONTACT</a>
+        <a href="/Contactpage/2" class="contact">CONTACT</a>
+        {{#each homeData}}
+          <p>{{this.id}}-{{this.title}}-<a
+              href="/Contactpage/{{this.id}}"
+              class="contact"
+            >CONTACT</a></p>
+        {{/each}}
         <a href="#" class="cv"><span>DOWNLOAD CV</span><i
             class="fa-sharp fa-solid fa-download"
             style="color: #000000"
