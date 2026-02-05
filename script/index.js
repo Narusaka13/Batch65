@@ -63,7 +63,7 @@ if (addproject && userlist) {
       renderUsers();
     });
   }
-  // event submit form
+  //submit form logic
   addproject.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -136,19 +136,21 @@ if (addproject && userlist) {
     });
 
     // Create project cards with filtered projects
-    const projectCard = filteredProjects
-      .map((project) => {
-        // Create technology badges
-        const techBadges =
-          project.technologies && project.technologies.length > 0
-            ? project.technologies
-                .map(
-                  (tech) => `<span class="badge bg-success me-1">${tech}</span>`
-                )
-                .join("")
-            : "";
-        // Create the card HTML
-        return `
+    if (filteredProjects.length > 0) {
+      const projectCard = filteredProjects
+        .map((project) => {
+          // Create technology badges
+          const techBadges =
+            project.technologies && project.technologies.length > 0
+              ? project.technologies
+                  .map(
+                    (tech) =>
+                      `<span class="badge bg-success me-1">${tech}</span>`
+                  )
+                  .join("")
+              : "";
+          // Create the card HTML
+          return `
     <div class="card Project col-md-6 col-lg-4" style="max-width: 19rem">
       <img src="..." class="card-img-top" alt="Project image" />
       <div class="card-body">
@@ -162,44 +164,51 @@ if (addproject && userlist) {
       </div>
     </div>
   `;
-      })
-      .join("");
-    // Add to the END of userlist (after placeholders)
-    userlist.innerHTML += projectCard;
-    // Show message if no results
-    if (filteredProjects.length === 0) {
-      userlist.innerHTML += `
-        <div class="col-12 text-center py-5">
-          <p class="text-muted">
-            ${
-              currentFilter !== "all" || currentSearch
-                ? "No projects found matching your filter criteria."
-                : "No projects yet. Create your first project!"
-            }
-          </p>
-        </div>
-      `;
-    }
-    // Reset filters fuction
-    window.resetFilters = function () {
-      if (filterButtons.length > 0) {
-        filterButtons.forEach((btn) => {
-          btn.classList.remove("btn-success");
-          btn.classList.add("btn-outline-secondary");
-        });
-        const allBtn = document.querySelector('.filter-btn[data-tech="all"]');
-        if (allBtn) {
-          allBtn.classList.remove("btn-outline-secondary");
-          allBtn.classList.add("btn-success");
+        })
+        .join("");
+      // Add to the END of userlist (after placeholders)
+      userlist.innerHTML += projectCard;
+    } else {
+      // Show message if no results
+      const noResultsMsg = document.createElement("div");
+      noResultsMsg.className = "no-results-message col-12 text-center py-5";
+      noResultsMsg.innerHTML = `
+        <p class="text-muted">
+          ${
+            currentFilter !== "all" || currentSearch
+              ? "No projects found matching your filter criteria."
+              : "No projects yet. Create your first project!"
+          }
+        </p>
+        ${
+          currentFilter !== "all" || currentSearch
+            ? '<button class="btn btn-link" onclick="resetFilters()">Clear filters</button>'
+            : ""
         }
-      }
+      `;
 
-      currentFilter = "all";
-      if (searchInput) searchInput.value = "";
-      currentSearch = "";
-      renderUsers();
-    };
+      // Add the message AFTER placeholders
+      userlist.appendChild(noResultsMsg);
+    }
   }
+  // Reset filters fuction
+  window.resetFilters = function () {
+    if (filterButtons.length > 0) {
+      filterButtons.forEach((btn) => {
+        btn.classList.remove("btn-success");
+        btn.classList.add("btn-outline-secondary");
+      });
+      const allBtn = document.querySelector('.filter-btn[data-tech="all"]');
+      if (allBtn) {
+        allBtn.classList.remove("btn-outline-secondary");
+        allBtn.classList.add("btn-success");
+      }
+    }
+    currentFilter = "all";
+    if (searchInput) searchInput.value = "";
+    currentSearch = "";
+    renderUsers();
+  };
 }
 
 // ============ LOGIC FOR detail.js ============//
