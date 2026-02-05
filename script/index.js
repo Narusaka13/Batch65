@@ -81,33 +81,36 @@ if (addproject && userlist) {
     );
     dynamicCards.forEach((card) => card.remove());
     // Create project cards
-    for (let i = 0; i < projects.length; i++) {
-      // Create technology badges
-      let techBadges = "";
-      if (projects[i].technologies && projects[i].technologies.length > 0) {
-        techBadges = projects[i].technologies
-          .map((tech) => `<span class="badge bg-success me-1">${tech}</span>`)
-          .join("");
-      }
-
-      // Create the card HTML
-      const projectCard = `
+    const projectCard = projects
+      .map((project) => {
+        // Create technology badges
+        const techBadges =
+          project.technologies && project.technologies.length > 0
+            ? project.technologies
+                .map(
+                  (tech) => `<span class="badge bg-success me-1">${tech}</span>`
+                )
+                .join("")
+            : "";
+        // Create the card HTML
+        return `
     <div class="card Project col-md-6 col-lg-4" style="max-width: 19rem">
       <img src="..." class="card-img-top" alt="Project image" />
       <div class="card-body">
-        <h5 class="card-title">${projects[i].projectname}</h5>
-        <p class="card-text fw-lighter fs-6 mb-2">${projects[i].start} => ${projects[i].end}</p>
+        <h5 class="card-title">${project.projectname}</h5>
+        <p class="card-text fw-lighter fs-6 mb-2">${project.start} => ${project.end}</p>
         <p class="card-text fw-light mb-2">${techBadges}</p>
-        <p class="card-text text-truncate">${projects[i].desc}</p>
-        <button onclick="navigateTo('detail', ${projects[i].id})" class="btn btn-success">
+        <p class="card-text text-truncate">${project.desc}</p>
+        <button onclick="navigateTo('detail', ${project.id})" class="btn btn-success">
               Learn More!
             </button>
       </div>
     </div>
   `;
-      // Add to the END of userlist (after placeholders)
-      userlist.innerHTML += projectCard;
-    }
+      })
+      .join("");
+    // Add to the END of userlist (after placeholders)
+    userlist.innerHTML += projectCard;
   }
 }
 
