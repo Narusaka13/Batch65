@@ -238,6 +238,61 @@
     <!-- My Project -->
     <div class="main-container row w-75 p-3">
       <h1 class="fw-bolder col-12 text-center">MY PROJECT</h1>
+      <!-- Filter Section - Add this before your project cards -->
+      <div class="filter-section mb-4 p-3 bg-light rounded">
+        <h5>Filter Projects:</h5>
+
+        <!-- Search Bar -->
+        <div class="mb-3">
+          <input
+            type="text"
+            id="searchInput"
+            class="form-control"
+            placeholder="Search by project name, description, or technology..."
+          />
+        </div>
+
+        <!-- Technology Filter Buttons -->
+        <div class="mb-3">
+          <small class="text-muted d-block mb-2">Filter by Technology:</small>
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-sm btn-success filter-btn" data-tech="all">
+              All Projects
+            </button>
+            <button
+              class="btn btn-sm btn-outline-secondary filter-btn"
+              data-tech="react"
+            >
+              React
+            </button>
+            <button
+              class="btn btn-sm btn-outline-secondary filter-btn"
+              data-tech="node"
+            >
+              Node.js
+            </button>
+            <button
+              class="btn btn-sm btn-outline-secondary filter-btn"
+              data-tech="next"
+            >
+              Next.js
+            </button>
+            <button
+              class="btn btn-sm btn-outline-secondary filter-btn"
+              data-tech="javascript"
+            >
+              JavaScript
+            </button>
+            <button
+              class="btn btn-sm btn-outline-secondary filter-btn"
+              data-tech="bootstrap"
+            >
+              Bootstrap
+            </button>
+            <!-- Add more buttons matching your checkbox technologies -->
+          </div>
+        </div>
+      </div>
       <div id="userlist" class="row gap-3 justify-content-center">
         <div
           class="card Project col-md-6 col-lg-4"

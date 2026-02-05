@@ -19,17 +19,49 @@ function navigateTo(page, projectId = null) {
 // input receiver
 const addproject = document.getElementById("addproject");
 const userlist = document.getElementById("userlist");
+// Filter Section
+const filterButtons = document.querySelectorAll(".filter-btn");
+const searchInput = document.getElementById("searchInput");
 // conditional page check
 if (addproject && userlist) {
   // Add counter for unique IDs
   let projectId = 1;
   // Load projects from localStorage OR start with empty array
   let projects = JSON.parse(localStorage.getItem("projects")) || [];
+  // Filter variables
+  let currentFilter = "all";
+  let currentSearch = "";
+  //rendering existing projects at localStorage
   if (projects.length > 0) {
     // Find the maximum ID in existing projects
     const storeId = Math.max(...projects.map((project) => project.id));
     projectId = storeId + 1;
     renderUsers();
+  }
+  // Filter buttons event listener
+  if (filterButtons.length > 0) {
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        // Update active button styling
+        filterButtons.forEach((btn) => {
+          btn.classList.remove("btn-success");
+          btn.classList.add("btn-outline-secondary");
+        });
+        button.classList.remove("btn-outline-secondary");
+        button.classList.add("btn-success");
+
+        // Update filter and re-render
+        currentFilter = button.getAttribute("data-tech");
+        renderUsers();
+      });
+    });
+  }
+  // Search input event listener
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      currentSearch = e.target.value.toLowerCase();
+      renderUsers();
+    });
   }
   // event submit form
   addproject.addEventListener("submit", function (e) {
@@ -80,8 +112,31 @@ if (addproject && userlist) {
       ".card.Project:not([data-placeholder])"
     );
     dynamicCards.forEach((card) => card.remove());
-    // Create project cards
-    const projectCard = projects
+    // Filter projects based on current filter and search
+    const filteredProjects = projects.filter((project) => {
+      // Apply technology filter
+      if (currentFilter !== "all") {
+        const hasTech = project.technologies?.some(
+          (tech) => tech.toLowerCase() === currentFilter.toLowerCase()
+        );
+        if (!hasTech) return false;
+      }
+      // Apply search filter
+      if (currentSearch) {
+        const searchMatch =
+          project.projectname?.toLowerCase().includes(currentSearch) ||
+          project.desc?.toLowerCase().includes(currentSearch) ||
+          project.technologies?.some((tech) =>
+            tech.toLowerCase().includes(currentSearch)
+          );
+        if (!searchMatch) return false;
+      }
+
+      return true; // Keep project if all filters pass
+    });
+
+    // Create project cards with filtered projects
+    const projectCard = filteredProjects
       .map((project) => {
         // Create technology badges
         const techBadges =
@@ -111,6 +166,39 @@ if (addproject && userlist) {
       .join("");
     // Add to the END of userlist (after placeholders)
     userlist.innerHTML += projectCard;
+    // Show message if no results
+    if (filteredProjects.length === 0) {
+      userlist.innerHTML += `
+        <div class="col-12 text-center py-5">
+          <p class="text-muted">
+            ${
+              currentFilter !== "all" || currentSearch
+                ? "No projects found matching your filter criteria."
+                : "No projects yet. Create your first project!"
+            }
+          </p>
+        </div>
+      `;
+    }
+    // Reset filters fuction
+    window.resetFilters = function () {
+      if (filterButtons.length > 0) {
+        filterButtons.forEach((btn) => {
+          btn.classList.remove("btn-success");
+          btn.classList.add("btn-outline-secondary");
+        });
+        const allBtn = document.querySelector('.filter-btn[data-tech="all"]');
+        if (allBtn) {
+          allBtn.classList.remove("btn-outline-secondary");
+          allBtn.classList.add("btn-success");
+        }
+      }
+
+      currentFilter = "all";
+      if (searchInput) searchInput.value = "";
+      currentSearch = "";
+      renderUsers();
+    };
   }
 }
 
