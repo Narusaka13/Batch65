@@ -1,4 +1,6 @@
-// ============ LOGIC FOR navigation.js ============//
+// ============ GLOBAL FUNCTIONS ============//
+
+// LOGIC FOR navigation.js //
 function navigateTo(page, projectId = null) {
   // Map pages URLs
   const pages = {
@@ -14,399 +16,401 @@ function navigateTo(page, projectId = null) {
     window.location.href = pages[page] || "HomePage.html";
   }
 }
+// Storage functions - used on multiple pages
+function getProjectsFromStorage() {
+  return JSON.parse(localStorage.getItem("projects")) || [];
+}
+function saveProjectsToStorage(projects) {
+  localStorage.setItem("projects", JSON.stringify(projects));
+}
+function getProjectById(id) {
+  const projects = getProjectsFromStorage();
+  return projects.find((project) => project.id === Number(id));
+}
+function getNextProjectId() {
+  const projects = getProjectsFromStorage();
+  if (projects.length === 0) return 1;
+  return Math.max(...projects.map((p) => p.id || 0)) + 1;
+}
 
-// ============ LOGIC FOR input.js ============ //
-// input receiver
-const addproject = document.getElementById("addproject");
-const userlist = document.getElementById("userlist");
-// Filter Section
-const filterButtons = document.querySelectorAll(".filter-btn");
-const searchInput = document.getElementById("searchInput");
-// conditional page check
-if (addproject && userlist) {
-  // Add counter for unique IDs
-  let projectId = 1;
-  // Load projects from localStorage OR start with empty array
-  let projects = JSON.parse(localStorage.getItem("projects")) || [];
-  // Filter variables
-  let currentFilter = ["all"];
-  let currentSearch = "";
-  // Track if filter is active
-  let isFilterActive = false;
+// ============ LOGIC FOR myProjectpage ============ //
 
-  // Helper function to clear all dynamic content
-  function clearDynamicContent() {
-    const dynamicCards = userlist.querySelectorAll(
-      ".card.Project:not([data-placeholder]), .no-results-message"
-    );
-    dynamicCards.forEach((card) => card.remove());
+// Validation functions
+function validateProjectForm(projectData) {
+  if (!projectData.projectname?.trim()) {
+    return "Project name is required";
   }
-  // Initial render
-  function initialRender() {
-    if (projects.length > 0) {
-      // Find the maximum ID in existing projects
-      const maxId = Math.max(...projects.map((project) => project.id || 0));
-      projectId = maxId + 1;
-    }
-    renderUnfilteredProjects();
+  if (!projectData.start) {
+    return "Start date is required";
   }
-  // Call initial render
-  initialRender();
-
-  // Filter buttons event listener
-  if (filterButtons.length > 0) {
-    filterButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        // update for multiple filters selection at once
-        const tech = button.getAttribute("data-tech");
-        // Update filter active state
-        isFilterActive = true;
-        // Handle "all" button specipically
-        if (tech === "all") {
-          // cancel all filters for all button
-          filterButtons.forEach((btn) => {
-            btn.classList.remove("btn-success");
-            btn.classList.add("btn-outline-secondary");
-          });
-          button.classList.remove("btn-outline-secondary");
-          button.classList.add("btn-success");
-          currentFilter = ["all"];
-        } else {
-          // Remove "all" from filters if any other filter is selected
-          if (currentFilter.includes("all")) {
-            currentFilter = currentFilter.filter((f) => f !== "all");
-            const allBtn = document.querySelector(
-              '.filter-btn[data-tech="all"]'
-            );
-            if (allBtn) {
-              allBtn.classList.remove("btn-success");
-              allBtn.classList.add("btn-outline-secondary");
-            }
-          }
-          // Toggle this filter
-          if (currentFilter.includes(tech)) {
-            // Remove filter
-            currentFilter = currentFilter.filter((f) => f !== tech);
-            button.classList.remove("btn-success");
-            button.classList.add("btn-outline-secondary");
-          } else {
-            // Add filter
-            currentFilter.push(tech);
-            button.classList.remove("btn-outline-secondary");
-            button.classList.add("btn-success");
-          }
-
-          // Auto-select "all" if no filters are selected
-          if (currentFilter.length === 0) {
-            currentFilter = ["all"];
-            const allBtn = document.querySelector(
-              '.filter-btn[data-tech="all"]'
-            );
-            if (allBtn) {
-              allBtn.classList.remove("btn-outline-secondary");
-              allBtn.classList.add("btn-success");
-            }
-          }
-        }
-
-        runFilterSequence();
-      });
-    });
+  if (!projectData.end) {
+    return "End date is required";
   }
-
-  // Search input event listener
-  if (searchInput) {
-    searchInput.addEventListener("input", (e) => {
-      // Update filter active state
-      isFilterActive = true;
-      currentSearch = e.target.value.toLowerCase();
-      runFilterSequence();
-    });
+  if (!projectData.desc?.trim()) {
+    return "Description is required";
   }
-  //submit form logic
-  addproject.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    // Get form values
-    let projectname = document.getElementById("ProjectName").value;
-    let start = document.getElementById("start-date").value;
-    let end = document.getElementById("end-date").value;
-    let desc = document.getElementById("description").value;
-
-    // Basic validation
-    if (!projectname || !start || !end || !desc) {
-      alert("Please fill in all required fields!");
-      return;
-    }
-    // Date validation addition
-    if (new Date(start) > new Date(end)) {
-      alert("Start date cannot be after end date!");
-      return;
-    }
-
-    // Get selected technologies from checkboxes
-    let techCheckboxes = document.querySelectorAll(
-      'input[type="checkbox"]:checked'
-    );
-    let tech = Array.from(techCheckboxes).map((checkbox) => checkbox.value);
-    // Create project object WITH ID
-    const project = {
-      id: projectId++,
-      projectname,
-      start,
-      end,
-      desc,
-      technologies: tech,
-      image:
-        "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-    };
-
-    // Add to the array
-    projects.push(project);
-    // Save to localStorage
-    localStorage.setItem("projects", JSON.stringify(projects));
-    // Check data input to array;
-    console.log(projects);
-    // Update header
-    changeElement();
-    // braching logic, show based on filter state
-    if (isFilterActive) {
-      // If filter active, show filtered projects
-      runFilterSequence();
-    } else {
-      // If filter not active, show all projects
-      renderUnfilteredProjects();
-    }
-  });
-
-  // Header change //
-  function changeElement() {
-    document.getElementById(
-      "input-user"
-    ).innerHTML = `<p>New project has been added!!</p>`;
+  if (new Date(projectData.start) > new Date(projectData.end)) {
+    return "Start date cannot be after end date";
   }
-  //FILTER SEQUENCE LOGIC
-  function runFilterSequence() {
-    // Clear ALL dynamic content
-    clearDynamicContent();
-    // If search is empty and filter is "all", show all projects
-    if (
-      !currentSearch &&
-      currentFilter.length === 1 &&
-      currentFilter[0] === "all"
-    ) {
-      renderUnfilteredProjects();
-      return;
-    }
-    // Filter projects based on current filter and search
-    const filteredProjects = projects.filter((project) => {
-      // Apply multiple technology filters
-      if (currentFilter.length > 0 && !currentFilter.includes("all")) {
-        // Check if project has selected technologies
-        const hasTech = currentFilter.some((selectedTech) =>
-          project.technologies?.some(
-            (projectTech) =>
-              projectTech.toLowerCase() === selectedTech.toLowerCase()
-          )
-        );
-        if (!hasTech) return false;
-      }
-      // Apply search filter
-      if (currentSearch) {
-        const searchMatch =
-          project.projectname?.toLowerCase().includes(currentSearch) ||
-          project.desc?.toLowerCase().includes(currentSearch) ||
-          project.technologies?.some((tech) =>
-            tech.toLowerCase().includes(currentSearch)
-          );
-        if (!searchMatch) return false;
-      }
-      //keep project if all filters pass
-      return true;
-    });
-    // Path branching logic
-    if (filteredProjects.length > 0) {
-      // PATH B: Filter found matching projects
-      showFilteredProjects(filteredProjects);
-    } else {
-      // PATH A: No matching projects found
-      showNoResultsMessage();
-    }
-  }
+  return "";
+}
 
-  //Rendering sequence LOGIC
-  function renderUnfilteredProjects() {
-    // Clear only non-placeholder cards
-    clearDynamicContent();
+// Project Card Renderer
+//Tech Badges
+function createTechnologyBadges(technologies) {
+  if (!technologies || technologies.length === 0) return "";
 
-    // Reset filter state
-    isFilterActive = false;
-    currentFilter = ["all"];
-    currentSearch = "";
+  return technologies
+    .map((tech) => `<span class="badge bg-success me-1">${tech}</span>`)
+    .join("");
+}
+// Card Renderer
+function createProjectCard(project) {
+  const techBadges = createTechnologyBadges(project.technologies);
 
-    // Reset UI elements
-    if (searchInput) searchInput.value = "";
-    if (filterButtons.length > 0) {
-      filterButtons.forEach((btn) => {
-        btn.classList.remove("btn-success");
-        btn.classList.add("btn-outline-secondary");
-      });
-      const allBtn = document.querySelector('.filter-btn[data-tech="all"]');
-      if (allBtn) {
-        allBtn.classList.remove("btn-outline-secondary");
-        allBtn.classList.add("btn-success");
-      }
-    }
-
-    // Show all projects from localStorage
-    if (projects.length > 0) {
-      const projectCards = projects
-        .map((project) => createProjectCard(project))
-        .join("");
-      userlist.innerHTML += projectCards;
-    } else {
-      // Initial empty state
-      showInitialEmptyState();
-    }
-  }
-  function showFilteredProjects(filteredProjects) {
-    // Create and show filtered project cards
-    const projectCards = filteredProjects
-      .map((project) => createProjectCard(project))
-      .join("");
-    userlist.innerHTML += projectCards;
-  }
-  function showNoResultsMessage() {
-    // Show "no results" message
-    const noResultsMsg = document.createElement("div");
-    noResultsMsg.className = "no-results-message col-12 text-center py-5";
-    noResultsMsg.innerHTML = `
-      <p class="text-muted">No projects found matching your filter criteria.</p>
-      <button class="btn btn-link" onclick="resetFilters()">Clear filters</button>
-    `;
-    userlist.appendChild(noResultsMsg);
-  }
-  function showInitialEmptyState() {
-    const noResultsMsg = document.createElement("div");
-    noResultsMsg.className = "no-results-message col-12 text-center py-5";
-    noResultsMsg.innerHTML = `
-      <p class="text-muted">No projects yet. Create your first project!</p>
-    `;
-    userlist.appendChild(noResultsMsg);
-  }
-  function createProjectCard(project) {
-    // Create technology badges
-    const techBadges =
-      project.technologies && project.technologies.length > 0
-        ? project.technologies
-            .map((tech) => `<span class="badge bg-success me-1">${tech}</span>`)
-            .join("")
-        : "";
-    // Create the card HTML
-    return `
+  return `
     <div class="card Project col-md-6 col-lg-4" style="max-width: 19rem">
-      <img src="..." class="card-img-top" alt="Project image" />
+      <img src="${project.image}" class="card-img-top" alt="${project.projectname}">
       <div class="card-body">
         <h5 class="card-title">${project.projectname}</h5>
         <p class="card-text fw-lighter fs-6 mb-2">${project.start} => ${project.end}</p>
         <p class="card-text fw-light mb-2">${techBadges}</p>
         <p class="card-text text-truncate">${project.desc}</p>
-        <button onclick="navigateTo('detail', ${project.id})" class="btn btn-success">
-              Learn More!
-            </button>
+        <button onclick="navigateTo('detail', ${project.id})" 
+                class="btn btn-success">
+          Learn More!
+        </button>
       </div>
     </div>
   `;
-  }
-  // Reset filters function - Returns to unfiltered state
-  window.resetFilters = function () {
-    // Clear search input
-    if (searchInput) searchInput.value = "";
-    currentSearch = "";
-    // Reset filter buttons
-    if (filterButtons.length > 0) {
-      filterButtons.forEach((btn) => {
-        btn.classList.remove("btn-success");
-        btn.classList.add("btn-outline-secondary");
-      });
-      const allBtn = document.querySelector('.filter-btn[data-tech="all"]');
-      if (allBtn) {
-        allBtn.classList.remove("btn-outline-secondary");
-        allBtn.classList.add("btn-success");
-      }
-    }
-    // Reset all filter states
-    currentFilter = ["all"];
-    isFilterActive = false;
+}
+// No Results Message
+function createNoResultsMessage() {
+  return `
+    <div class="no-results-message col-12 text-center py-5">
+      <p class="text-muted">No projects found matching your filter criteria.</p>
+      <button class="btn btn-link" onclick="resetFilters()">
+        Clear filters
+      </button>
+    </div>
+  `;
+}
+// Initial Empty State
+function createInitialEmptyState() {
+  return `
+    <div class="no-results-message col-12 text-center py-5">
+      <p class="text-muted">No projects yet. Create your first project!</p>
+    </div>
+  `;
+}
 
-    // Return to unfiltered view
-    renderUnfilteredProjects();
+// Filter Manager
+let currentFilter = ["all"];
+let currentSearch = "";
+let isFilterActive = false;
+// Filtering logic
+function getFilterState() {
+  return {
+    filter: [...currentFilter],
+    search: currentSearch,
+    isActive: isFilterActive,
   };
 }
+//Udate filter logic
+function setFilter(newFilter) {
+  currentFilter = newFilter;
+  isFilterActive = true;
+}
+// search filter logic
+function setSearch(searchTerm) {
+  currentSearch = searchTerm.toLowerCase();
+  isFilterActive = true;
+}
+//reset filters logic
+function resetFilters() {
+  currentFilter = ["all"];
+  currentSearch = "";
+  isFilterActive = false;
+
+  // Update UI
+  updateFilterButtons(["all"]);
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) searchInput.value = "";
+
+  // Re-render projects
+  const userlist = document.getElementById("userlist");
+  if (userlist) {
+    const projects = getProjectsFromStorage();
+    renderProjects(projects, userlist);
+  }
+}
+// Project Filtering logic
+function applyFilters(projects) {
+  if (
+    !currentSearch &&
+    currentFilter.length === 1 &&
+    currentFilter[0] === "all"
+  ) {
+    return projects;
+  }
+
+  return projects.filter((project) => {
+    // Technology filter
+    if (currentFilter.length > 0 && !currentFilter.includes("all")) {
+      const hasAnyTech = currentFilter.some((selectedTech) =>
+        project.technologies?.some(
+          (projectTech) =>
+            projectTech.toLowerCase() === selectedTech.toLowerCase()
+        )
+      );
+      if (!hasAnyTech) return false;
+    }
+    // Search filter
+    if (currentSearch) {
+      const searchMatch =
+        project.projectname?.toLowerCase().includes(currentSearch) ||
+        project.desc?.toLowerCase().includes(currentSearch) ||
+        project.technologies?.some((tech) =>
+          tech.toLowerCase().includes(currentSearch)
+        );
+      if (!searchMatch) return false;
+    }
+    return true;
+  });
+}
+
+// UI Page Controler
+function updateFilterButtons(activeFilters) {
+  const filterButtons = document.querySelectorAll(".filter-btn");
+  if (!filterButtons.length) return;
+
+  filterButtons.forEach((btn) => {
+    const tech = btn.getAttribute("data-tech");
+    if (activeFilters.includes(tech)) {
+      btn.classList.remove("btn-outline-secondary");
+      btn.classList.add("btn-success");
+    } else {
+      btn.classList.remove("btn-success");
+      btn.classList.add("btn-outline-secondary");
+    }
+  });
+}
+// Success Message Logic
+function showSuccessMessage(message) {
+  const inputUser = document.getElementById("input-user");
+  if (!inputUser) return;
+  inputUser.innerHTML = `<p class="text-success">${message}</p>`;
+}
+// Clear Content Logic
+function clearDynamicContent(container) {
+  const dynamicCards = container.querySelectorAll(
+    ".card.Project:not([data-placeholder]), .no-results-message"
+  );
+  dynamicCards.forEach((card) => card.remove());
+}
+
+// Render function - specific to My Project Page
+function renderProjects(projects, container) {
+  clearDynamicContent(container);
+  const allProjects = getProjectsFromStorage();
+
+  if (projects.length === 0) {
+    if (allProjects.length === 0 && !isFilterActive) {
+      container.innerHTML += createInitialEmptyState();
+    } else {
+      container.innerHTML += createNoResultsMessage();
+    }
+    return;
+  }
+
+  const projectCards = projects
+    .map((project) => createProjectCard(project))
+    .join("");
+
+  container.innerHTML += projectCards;
+}
+
+// My Project Page Event Handlers
+function handleFilterButtonClick(event) {
+  const button = event.currentTarget;
+  const tech = button.getAttribute("data-tech");
+  const projects = getProjectsFromStorage();
+
+  let newFilters;
+  if (tech === "all") {
+    newFilters = ["all"];
+  } else {
+    if (currentFilter.includes("all")) {
+      newFilters = [tech];
+    } else if (currentFilter.includes(tech)) {
+      newFilters = currentFilter.filter((f) => f !== tech);
+    } else {
+      newFilters = [...currentFilter, tech];
+    }
+
+    if (newFilters.length === 0) newFilters = ["all"];
+  }
+
+  setFilter(newFilters);
+  updateFilterButtons(newFilters);
+
+  const filteredProjects = applyFilters(projects);
+  const userlist = document.getElementById("userlist");
+  if (userlist) {
+    renderProjects(filteredProjects, userlist);
+  }
+}
+
+function handleSearchInput(event) {
+  const projects = getProjectsFromStorage();
+  setSearch(event.target.value);
+
+  const filteredProjects = applyFilters(projects);
+  const userlist = document.getElementById("userlist");
+  if (userlist) {
+    renderProjects(filteredProjects, userlist);
+  }
+}
+
+function handleFormSubmit(event) {
+  event.preventDefault();
+
+  // Get form data
+  const projectData = {
+    projectname: document.getElementById("ProjectName").value.trim(),
+    start: document.getElementById("start-date").value,
+    end: document.getElementById("end-date").value,
+    desc: document.getElementById("description").value.trim(),
+    technologies: Array.from(
+      document.querySelectorAll('input[type="checkbox"]:checked')
+    ).map((checkbox) => checkbox.value),
+    image:
+      "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+  };
+
+  // Validate
+  const error = validateProjectForm(projectData);
+  if (error) {
+    alert(error);
+    return;
+  }
+
+  // Save project
+  const newProject = {
+    id: getNextProjectId(),
+    ...projectData,
+  };
+
+  const allProjects = getProjectsFromStorage();
+  allProjects.push(newProject);
+  saveProjectsToStorage(allProjects);
+
+  // Reset form
+  event.target.reset();
+
+  // Show success message
+  showSuccessMessage("New project has been added!");
+
+  // Re-render based on current filter state
+  const projectsToShow = isFilterActive
+    ? applyFilters(allProjects)
+    : allProjects;
+
+  const userlist = document.getElementById("userlist");
+  if (userlist) {
+    renderProjects(projectsToShow, userlist);
+  }
+}
+
+// My Project Page Initialization
+const addproject = document.getElementById("addproject");
+const userlist = document.getElementById("userlist");
+const filterButtons = document.querySelectorAll(".filter-btn");
+const searchInput = document.getElementById("searchInput");
+
+if (!addproject || !userlist) return;
+
+// Load initial projects
+const projects = getProjectsFromStorage();
+
+// Initial render
+renderProjects(projects, userlist);
+
+// Setup event listeners
+filterButtons.forEach((button) => {
+  button.addEventListener("click", handleFilterButtonClick);
+});
+
+if (searchInput) {
+  searchInput.addEventListener("input", handleSearchInput);
+}
+
+addproject.addEventListener("submit", handleFormSubmit);
 // ============ LOGIC FOR detail.js ============//
 const container = document.getElementById("container");
-if (container) {
-  const projectName = document.getElementById("projectName");
-  const image = document.getElementById("image");
-  const date = document.getElementById("date");
-  const technologies = document.getElementById("technologies");
-  const description = document.getElementById("description");
+if (!container) return;
 
-  const fillData = function (project) {
-    const technologiesData = project.technologies
-      .map((tech) => `<span class="badge bg-success me-1">${tech}</span>`)
-      .join("");
+const projectName = document.getElementById("projectName");
+const image = document.getElementById("image");
+const date = document.getElementById("date");
+const technologies = document.getElementById("technologies");
+const description = document.getElementById("description");
 
-    projectName.innerText = project.projectname;
-    image.src = project.image || "https://placehold.co/600x400";
-    date.innerText = `${project.start} - ${project.end}`;
-    technologies.innerHTML = technologiesData;
-    description.innerText = project.desc;
-  };
-  // Function to prepare and load data
-  const prepareData = function () {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
-
-    if (!id) {
-      container.innerHTML = `
-          <div class="alert alert-danger">
-            <h4>Id is not found</h4>
-            <p>Id not included in URL</p>
-            <a href="MyProjectpage.html" class="btn btn-primary">Back to Projects</a>
-          </div>
-        `;
-      return;
-    }
-
-    const result = localStorage.getItem("projects");
-    if (!result) {
-      container.innerHTML = `
-        <div class="alert alert-danger">
-        <h4>No projects found</h4>
-        <p>No projects data in localStorage</p>
-        <a href="MyProjectpage.html" class="btn btn-primary">Back to Projects</a>
-      </div>
-    `;
-      return;
-    }
-
-    const data = JSON.parse(result);
-    const project = data.find((d) => d.id === Number(id));
-
-    if (project) {
-      fillData(project);
-    } else {
-      container.innerHTML = `
-      <div class="alert alert-danger">
-        <h4>Data is not found</h4>
-        <p>Project with id ${id} not found</p>
-        <a href="MyProjectpage.html" class="btn btn-primary">Back to Projects</a>
-      </div>
-    `;
-    }
-  };
-
-  // Run on page load
-  prepareData();
+if (!projectName || !image || !date || !technologies || !description) {
+  return;
 }
+
+function renderProject(project) {
+  const technologiesData = project.technologies
+    .map((tech) => `<span class="badge bg-success me-1">${tech}</span>`)
+    .join("");
+
+  projectName.innerText = project.projectname;
+  image.src = project.image || "https://placehold.co/600x400";
+  date.innerText = `${project.start} - ${project.end}`;
+  technologies.innerHTML = technologiesData;
+  description.innerText = project.desc;
+}
+
+function renderError(message, details) {
+  container.innerHTML = `
+      <div class="alert alert-danger">
+        <h4>${message}</h4>
+        <p>${details}</p>
+        <a href="MyProjectpage.html" class="btn btn-primary">Back to Projects</a>
+      </div>
+    `;
+}
+
+// Load and display project data
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+if (!id) {
+  renderError("Id is not found", "Id not included in URL");
+  return;
+}
+
+const project = getProjectById(id);
+
+if (project) {
+  renderProject(project);
+} else {
+  renderError("Data is not found", `Project with id ${id} not found`);
+}
+
+// ==============================================
+// PAGE DETECTION AND INITIALIZATION
+// ==============================================
+
+// Simple page detection based on URL
+// document.addEventListener('DOMContentLoaded', function() {
+//   const path = window.location.pathname;
+
+//   if (path.includes('MyProjectpage.html')) {
+//     initializeMyProjectPage();
+//   } else if (path.includes('Detailpage.html')) {
+//     initializeDetailPage();
+//   }
+//   // Other pages don't need special initialization
+// });
