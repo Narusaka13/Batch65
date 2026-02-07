@@ -29,7 +29,7 @@ if (addproject && userlist) {
   // Load projects from localStorage OR start with empty array
   let projects = JSON.parse(localStorage.getItem("projects")) || [];
   // Filter variables
-  let currentFilter = "all";
+  let currentFilter = ["all"];
   let currentSearch = "";
   // Track if filter is active
   let isFilterActive = false;
@@ -45,7 +45,7 @@ if (addproject && userlist) {
   function initialRender() {
     if (projects.length > 0) {
       // Find the maximum ID in existing projects
-      const maxId = Math.max(...projects.map((project) => project.id));
+      const maxId = Math.max(...projects.map((project) => project.id || 0));
       projectId = maxId + 1;
     }
     renderUnfilteredProjects();
@@ -57,22 +57,63 @@ if (addproject && userlist) {
   if (filterButtons.length > 0) {
     filterButtons.forEach((button) => {
       button.addEventListener("click", () => {
+        // update for multiple filters selection at once
+        const tech = button.getAttribute("data-tech");
         // Update filter active state
         isFilterActive = true;
-        // Update active button styling
-        filterButtons.forEach((btn) => {
-          btn.classList.remove("btn-success");
-          btn.classList.add("btn-outline-secondary");
-        });
-        button.classList.remove("btn-outline-secondary");
-        button.classList.add("btn-success");
+        // Handle "all" button specipically
+        if (tech === "all") {
+          // cancel all filters for all button
+          filterButtons.forEach((btn) => {
+            btn.classList.remove("btn-success");
+            btn.classList.add("btn-outline-secondary");
+          });
+          button.classList.remove("btn-outline-secondary");
+          button.classList.add("btn-success");
+          currentFilter = ["all"];
+        } else {
+          // Remove "all" from filters if any other filter is selected
+          if (currentFilter.includes("all")) {
+            currentFilter = currentFilter.filter((f) => f !== "all");
+            const allBtn = document.querySelector(
+              '.filter-btn[data-tech="all"]'
+            );
+            if (allBtn) {
+              allBtn.classList.remove("btn-success");
+              allBtn.classList.add("btn-outline-secondary");
+            }
+          }
+          // Toggle this filter
+          if (currentFilter.includes(tech)) {
+            // Remove filter
+            currentFilter = currentFilter.filter((f) => f !== tech);
+            button.classList.remove("btn-success");
+            button.classList.add("btn-outline-secondary");
+          } else {
+            // Add filter
+            currentFilter.push(tech);
+            button.classList.remove("btn-outline-secondary");
+            button.classList.add("btn-success");
+          }
 
-        // Update filter and re-render
-        currentFilter = button.getAttribute("data-tech");
+          // Auto-select "all" if no filters are selected
+          if (currentFilter.length === 0) {
+            currentFilter = ["all"];
+            const allBtn = document.querySelector(
+              '.filter-btn[data-tech="all"]'
+            );
+            if (allBtn) {
+              allBtn.classList.remove("btn-outline-secondary");
+              allBtn.classList.add("btn-success");
+            }
+          }
+        }
+
         runFilterSequence();
       });
     });
   }
+
   // Search input event listener
   if (searchInput) {
     searchInput.addEventListener("input", (e) => {
@@ -86,10 +127,23 @@ if (addproject && userlist) {
   addproject.addEventListener("submit", function (e) {
     e.preventDefault();
 
+    // Get form values
     let projectname = document.getElementById("ProjectName").value;
     let start = document.getElementById("start-date").value;
     let end = document.getElementById("end-date").value;
     let desc = document.getElementById("description").value;
+
+    // Basic validation
+    if (!projectname || !start || !end || !desc) {
+      alert("Please fill in all required fields!");
+      return;
+    }
+    // Date validation addition
+    if (new Date(start) > new Date(end)) {
+      alert("Start date cannot be after end date!");
+      return;
+    }
+
     // Get selected technologies from checkboxes
     let techCheckboxes = document.querySelectorAll(
       'input[type="checkbox"]:checked'
@@ -136,16 +190,24 @@ if (addproject && userlist) {
     // Clear ALL dynamic content
     clearDynamicContent();
     // If search is empty and filter is "all", show all projects
-    if (!currentSearch && currentFilter === "all") {
+    if (
+      !currentSearch &&
+      currentFilter.length === 1 &&
+      currentFilter[0] === "all"
+    ) {
       renderUnfilteredProjects();
       return;
     }
     // Filter projects based on current filter and search
     const filteredProjects = projects.filter((project) => {
-      // Apply technology filter
-      if (currentFilter !== "all") {
-        const hasTech = project.technologies?.some(
-          (tech) => tech.toLowerCase() === currentFilter.toLowerCase()
+      // Apply multiple technology filters
+      if (currentFilter.length > 0 && !currentFilter.includes("all")) {
+        // Check if project has selected technologies
+        const hasTech = currentFilter.some((selectedTech) =>
+          project.technologies?.some(
+            (projectTech) =>
+              projectTech.toLowerCase() === selectedTech.toLowerCase()
+          )
         );
         if (!hasTech) return false;
       }
@@ -179,7 +241,7 @@ if (addproject && userlist) {
 
     // Reset filter state
     isFilterActive = false;
-    currentFilter = "all";
+    currentFilter = ["all"];
     currentSearch = "";
 
     // Reset UI elements
@@ -274,7 +336,7 @@ if (addproject && userlist) {
       }
     }
     // Reset all filter states
-    currentFilter = "all";
+    currentFilter = ["all"];
     isFilterActive = false;
 
     // Return to unfiltered view
