@@ -325,78 +325,79 @@ function handleFormSubmit(event) {
 // My Project Page Initialization
 const addproject = document.getElementById("addproject");
 const userlist = document.getElementById("userlist");
-const filterButtons = document.querySelectorAll(".filter-btn");
-const searchInput = document.getElementById("searchInput");
 
-if (!addproject || !userlist) return;
+if (addproject && userlist) {
+  const filterButtons = document.querySelectorAll(".filter-btn");
+  const searchInput = document.getElementById("searchInput");
 
-// Load initial projects
-const projects = getProjectsFromStorage();
+  // Load initial projects
+  const projects = getProjectsFromStorage();
 
-// Initial render
-renderProjects(projects, userlist);
+  // Initial render
+  renderProjects(projects, userlist);
 
-// Setup event listeners
-filterButtons.forEach((button) => {
-  button.addEventListener("click", handleFilterButtonClick);
-});
+  // Setup event listeners
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", handleFilterButtonClick);
+  });
 
-if (searchInput) {
-  searchInput.addEventListener("input", handleSearchInput);
+  if (searchInput) {
+    searchInput.addEventListener("input", handleSearchInput);
+  }
+
+  addproject.addEventListener("submit", handleFormSubmit);
 }
-
-addproject.addEventListener("submit", handleFormSubmit);
 // ============ LOGIC FOR detail.js ============//
 const container = document.getElementById("container");
-if (!container) return;
+if (container) {
+  const projectName = document.getElementById("projectName");
+  const image = document.getElementById("image");
+  const date = document.getElementById("date");
+  const technologies = document.getElementById("technologies");
+  const description = document.getElementById("description");
 
-const projectName = document.getElementById("projectName");
-const image = document.getElementById("image");
-const date = document.getElementById("date");
-const technologies = document.getElementById("technologies");
-const description = document.getElementById("description");
+  if (projectName && image && date && technologies && description) {
+  }
 
-if (!projectName || !image || !date || !technologies || !description) {
-  return;
-}
+  function renderDetailProject(project) {
+    const technologiesData = project.technologies
+      .map((tech) => `<span class="badge bg-success me-1">${tech}</span>`)
+      .join("");
 
-function renderProject(project) {
-  const technologiesData = project.technologies
-    .map((tech) => `<span class="badge bg-success me-1">${tech}</span>`)
-    .join("");
+    projectName.innerText = project.projectname;
+    image.src = project.image || "https://placehold.co/600x400";
+    date.innerText = `${project.start} - ${project.end}`;
+    technologies.innerHTML = technologiesData;
+    description.innerText = project.desc;
+  }
 
-  projectName.innerText = project.projectname;
-  image.src = project.image || "https://placehold.co/600x400";
-  date.innerText = `${project.start} - ${project.end}`;
-  technologies.innerHTML = technologiesData;
-  description.innerText = project.desc;
-}
-
-function renderError(message, details) {
-  container.innerHTML = `
+  function renderError(message, details) {
+    container.innerHTML = `
       <div class="alert alert-danger">
         <h4>${message}</h4>
         <p>${details}</p>
         <a href="MyProjectpage.html" class="btn btn-primary">Back to Projects</a>
       </div>
     `;
-}
+  }
 
-// Load and display project data
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+  // Load and display project data
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-if (!id) {
-  renderError("Id is not found", "Id not included in URL");
-  return;
-}
-
-const project = getProjectById(id);
-
-if (project) {
-  renderProject(project);
-} else {
-  renderError("Data is not found", `Project with id ${id} not found`);
+  if (!id) {
+    renderDetailError("Project ID Not Found", "No project ID specified in URL");
+  } else {
+    const project = getProjectById(id);
+    if (project) {
+      renderDetailProject(project);
+    } else {
+      renderDetailError(
+        "Project Not Found",
+        `Project with ID ${id} was not found`
+      );
+    }
+  }
 }
 
 // ==============================================
