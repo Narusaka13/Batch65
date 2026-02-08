@@ -138,11 +138,7 @@ function resetFilters() {
   if (searchInput) searchInput.value = "";
 
   // Re-render projects
-  const userlist = document.getElementById("userlist");
-  if (userlist) {
-    const projects = getProjectsFromStorage();
-    renderProjects(projects, userlist);
-  }
+  refreshProjects();
 }
 // Project Filtering logic
 function applyFilters(projects) {
@@ -157,7 +153,8 @@ function applyFilters(projects) {
   return projects.filter((project) => {
     // Technology filter
     if (currentFilter.length > 0 && !currentFilter.includes("all")) {
-      const hasAnyTech = currentFilter.some((selectedTech) =>
+      // Check if any of the selected technologies are in the project's technologies
+      const hasAnyTech = currentFilter.every((selectedTech) =>
         project.technologies?.some(
           (projectTech) =>
             projectTech.toLowerCase() === selectedTech.toLowerCase()
@@ -178,7 +175,57 @@ function applyFilters(projects) {
     return true;
   });
 }
+// Sorting Logic
+//sort variables
+let sortField = "name";
+let sortOrder = "asc";
 
+// Sorting function
+function sortProjects(projects) {
+  return [...projects].sort((a, b) => {
+    let valueA, valueB;
+    // Get values based on field
+    switch (sortField) {
+      case "name":
+        valueA = a.projectname?.toLowerCase() || "";
+        valueB = b.projectname?.toLowerCase() || "";
+        break;
+      case "startDate":
+        valueA = new Date(a.start);
+        valueB = new Date(b.start);
+        break;
+      case "endDate":
+        valueA = new Date(a.end);
+        valueB = new Date(b.end);
+        break;
+      //Default case
+      default:
+        valueA = a.projectname?.toLowerCase() || "";
+        valueB = b.projectname?.toLowerCase() || "";
+    }
+    // Compare with order
+    if (valueA < valueB) return sortOrder === "asc" ? -1 : 1;
+    if (valueA > valueB) return sortOrder === "asc" ? 1 : -1;
+    return 0;
+  });
+}
+
+// Update sorting and refresh
+function updateSorting(field = sortField, order = sortOrder) {
+  sortField = field;
+  sortOrder = order;
+  updateSortUI();
+  refreshProjects();
+}
+
+// Refresh function for updating
+function refreshProjects() {
+  const allProjects = getProjectsFromStorage();
+  const filtered = applyFilters(allProjects);
+  const sorted = sortProjects(filtered);
+  const userlist = document.getElementById("userlist");
+  if (userlist) renderProjects(sorted, userlist);
+}
 // UI Page Controler
 function updateFilterButtons(activeFilters) {
   const filterButtons = document.querySelectorAll(".filter-btn");
@@ -209,7 +256,7 @@ function clearDynamicContent(container) {
   dynamicCards.forEach((card) => card.remove());
 }
 
-// Render function - specific to My Project Page
+// Render function in My Project Page
 function renderProjects(projects, container) {
   clearDynamicContent(container);
   const allProjects = getProjectsFromStorage();
@@ -234,7 +281,6 @@ function renderProjects(projects, container) {
 function handleFilterButtonClick(event) {
   const button = event.currentTarget;
   const tech = button.getAttribute("data-tech");
-  const projects = getProjectsFromStorage();
 
   let newFilters;
   if (tech === "all") {
@@ -254,22 +300,12 @@ function handleFilterButtonClick(event) {
   setFilter(newFilters);
   updateFilterButtons(newFilters);
 
-  const filteredProjects = applyFilters(projects);
-  const userlist = document.getElementById("userlist");
-  if (userlist) {
-    renderProjects(filteredProjects, userlist);
-  }
+  refreshProjects();
 }
 
 function handleSearchInput(event) {
-  const projects = getProjectsFromStorage();
   setSearch(event.target.value);
-
-  const filteredProjects = applyFilters(projects);
-  const userlist = document.getElementById("userlist");
-  if (userlist) {
-    renderProjects(filteredProjects, userlist);
-  }
+  refreshProjects();
 }
 
 function handleFormSubmit(event) {
@@ -286,9 +322,7 @@ function handleFormSubmit(event) {
     ).map((checkbox) => checkbox.value),
     image:
       "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-  };
-
-  // Validate
+  }; // Validate
   const error = validateProjectForm(projectData);
   if (error) {
     alert(error);
@@ -310,16 +344,7 @@ function handleFormSubmit(event) {
 
   // Show success message
   showSuccessMessage("New project has been added!");
-
-  // Re-render based on current filter state
-  const projectsToShow = isFilterActive
-    ? applyFilters(allProjects)
-    : allProjects;
-
-  const userlist = document.getElementById("userlist");
-  if (userlist) {
-    renderProjects(projectsToShow, userlist);
-  }
+  refreshProjects();
 }
 
 // My Project Page Initialization
@@ -346,7 +371,18 @@ if (addproject && userlist) {
   }
 
   addproject.addEventListener("submit", handleFormSubmit);
+
+  updateSortUI();
 }
+// Update dropdown selections
+function updateSortUI() {
+  const fieldSelect = document.getElementById("sortField");
+  const orderSelect = document.getElementById("sortOrder");
+
+  if (fieldSelect) fieldSelect.value = sortField;
+  if (orderSelect) orderSelect.value = sortOrder;
+}
+
 // ============ LOGIC FOR detail.js ============//
 const container = document.getElementById("container");
 if (container) {
@@ -358,7 +394,6 @@ if (container) {
 
   if (projectName && image && date && technologies && description) {
   }
-
   function renderDetailProject(project) {
     const technologiesData = project.technologies
       .map((tech) => `<span class="badge bg-success me-1">${tech}</span>`)
@@ -386,32 +421,13 @@ if (container) {
   const id = params.get("id");
 
   if (!id) {
-    renderDetailError("Project ID Not Found", "No project ID specified in URL");
+    renderError("Project ID Not Found", "No project ID specified in URL");
   } else {
     const project = getProjectById(id);
     if (project) {
       renderDetailProject(project);
     } else {
-      renderDetailError(
-        "Project Not Found",
-        `Project with ID ${id} was not found`
-      );
+      renderError("Project Not Found", `Project with ID ${id} was not found`);
     }
   }
 }
-
-// ==============================================
-// PAGE DETECTION AND INITIALIZATION
-// ==============================================
-
-// Simple page detection based on URL
-// document.addEventListener('DOMContentLoaded', function() {
-//   const path = window.location.pathname;
-
-//   if (path.includes('MyProjectpage.html')) {
-//     initializeMyProjectPage();
-//   } else if (path.includes('Detailpage.html')) {
-//     initializeDetailPage();
-//   }
-//   // Other pages don't need special initialization
-// });
