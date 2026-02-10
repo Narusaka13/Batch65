@@ -2,22 +2,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Homepage</title>
+    <title>LOGIN</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
     />
     <link rel="stylesheet" href="../assets/CSS/style.css" />
   </head>
@@ -44,7 +34,7 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <a
-                class="nav-link active"
+                class="nav-link"
                 onclick="navigateTo('home')"
                 aria-current="page"
                 href="#"
@@ -86,7 +76,7 @@
                 /> -->
             <button
               type="button"
-              class="btn btn-outline-success"
+              class="btn btn-outline-success active"
               onclick="navigateTo('contact')"
             >
               Contact Me!!
@@ -95,80 +85,74 @@
         </div>
       </div>
     </nav>
-    {{#if activeUser}}
-      <div class="main-container col w-75"><h1>Welcome
-          {{activeUser.name}}
-        </h1>
-        <h1>@{{activeUser.email}}</h1>
-      </div>
-    {{/if}}
 
-    <div class="main-container col w-75">
-      <div class="row intro w-50">
-        <h1><b>Rise and Shine!!! Narusaka Here!!!</b></h1>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim odit,
-          temporibus harum esse quisquam nam repellat minima tempora voluptatum
-          fuga. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum,
-          possimus necessitatibus! Perspiciatis aliquam, earum ipsam cum, labore
-          accusantium odio excepturi quidem dolore porro iste at? Odit quisquam
-          officiis aut ipsam.
-        </p>
-        <a href="/Contactpage/2" class="contact">CONTACT</a>
-        <a href="/login" class="contact">LOGIN</a>
-        <a href="/register" class="contact">REGISTER</a>
-        {{#each result.rows}}
-          <p>{{this.firstName}}
-            {{this.firstName}}
-            :
-            {{this.E-mail}}<a
-              href="/Contactpage/{{this.id}}"
-              class="contact"
-            >CONTACT</a></p>
-        {{/each}}
-        <a href="#" class="cv"><span>DOWNLOAD CV</span><i
-            class="fa-sharp fa-solid fa-download"
-            style="color: #000000"
-          ></i></a>
-        <div class="socials">
-          <i
-            class="fa-brands fa-xl fa-square-linkedin"
-            style="color: #000000"
-          ></i>
-          <i class="fa-brands fa-xl fa-instagram" style="color: #000000"></i>
-          <i
-            class="fa-brands fa-xl fa-square-facebook"
-            style="color: #000000"
-          ></i>
-          <i
-            class="fa-brands fa-xl fa-square-x-twitter"
-            style="color: #000000"
-          ></i>
+    <div class="contact-container">
+      <!-- Contact Form Card -->
+      <div class="main-container p-3 w-75">
+        <!-- Page Header -->
+        <div class="contact-header w-100 text-center mb-3">
+          <h1 class="fw-bolder">LOGIN</h1>
+          {{#if message}}
+            <p style="color: red;">{{message}}</p>
+          {{/if}}
+          <p class="contact-subtitle">
+            Please fill out the form below to contact me in :
+            {{phoneNumber}}
+          </p>
         </div>
-      </div>
-      <div class="row card mb-5">
-        <div class="card-img">
-          <img
-            class="card-img-top"
-            src="https://eu4.paradoxwikis.com/images/3/37/Egypt.png"
-            alt="Frofile"
-          />
-        </div>
-        <div class="card-body text-center">
-          <h1>Narusaka Jun</h1>
-          <p class="card-text">Software Engineer</p>
-        </div>
+
+        <!-- Contact Form -->
+        <form
+          action="/login"
+          method="post"
+          id="contactForm"
+          class="contact-form w-100"
+        >
+          <!-- Email Field -->
+          <div class="form-field mb-3">
+            <label for="email" class="form-label">Email</label>
+            <div class="mb-3">
+              <div>
+                <input
+                  type="email"
+                  name="email"
+                  class="form-control"
+                  id="elmail"
+                  placeholder="Enter your email"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="mb-3 form-field">
+            <label for="Password" class="form-label">Password</label>
+            <div>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                id="password"
+                placeholder="Enter your password"
+              />
+            </div>
+          </div>
+          <!-- Submit Button -->
+          <div class="form-submit text-center">
+            <button type="submit" class="submit-btn btn btn-primary">
+              LOGIN
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-    <footer class="text-center fw-bold">Narusaka@2026</footer>
 
-    <!-- JavaScript Files -->
+    <footer class="text-center fw-bold">Narusaka@2026</footer>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
     <script src="../assets/JS/index.js"></script>
-    <script src="../assets/JS/hallo.js"></script>
   </body>
 </html>
