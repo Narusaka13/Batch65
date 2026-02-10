@@ -51,16 +51,14 @@ app.use(
 );
 
 app.get("/", home);
-app.get("/contact", (req, res) => {
-  const phoneNumber = 6287839056763;
-  res.render("Contactpage", { phoneNumber });
-}); ///renders the contact page
+app.get("/contact", contact);
 app.get("/projects", projects);
 app.get("/detail", details);
 // app.get("/Contactpage/:id", contactpageGet);
 app.get("/login", login);
 app.get("/register", register);
 
+app.post("/logout", logout);
 app.post("/contact", handleContact); //submit the contact form
 app.post("/login", handleLogin); //submit the login form
 app.post("/register", handleRegister); //submit the register form
@@ -86,7 +84,17 @@ function home(req, res) {
 
   // console.log(activeUser);
 }
+function contact(req, res) {
+  const phoneNumber = 6287839056763;
+  if (!req.session.Authentication) {
+    return res.render("login");
+  }
+  res.render("Contactpage", { phoneNumber });
+}
 function projects(req, res) {
+  if (!req.session.Authentication) {
+    return res.render("login");
+  }
   res.render("MyProjectpage");
 }
 function details(req, res) {
@@ -133,10 +141,7 @@ function login(req, res) {
   res.render("login", { message: req.flash("error") });
 }
 function register(req, res) {
-  res.render(
-    "register"
-    // , { message: req.flash("error") }
-  );
+  res.render("register", { message: req.flash("error") });
 }
 async function handleLogin(req, res) {
   const { email, password } = req.body;
@@ -162,8 +167,8 @@ async function handleRegister(req, res) {
   const registered = await db.query(
     `SELECT * FROM public."Authentication" WHERE "E_mail" = '${email}'`
   );
-  console.log(registered.rows);
-  if (registered) {
+  console.log(registered.rows[0]);
+  if (registered.rows[0]) {
     req.flash("error", "Email was already registered");
     return res.redirect("/register");
   }
@@ -172,4 +177,8 @@ async function handleRegister(req, res) {
   const result = await db.query(query);
   console.log(fname, lname, email, password, hashPW);
   res.redirect("/login");
+}
+function logout(req, res) {
+  req.session.destroy();
+  return res.redirect("/");
 }

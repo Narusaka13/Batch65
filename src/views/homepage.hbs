@@ -115,8 +115,6 @@
           officiis aut ipsam.
         </p>
         <a href="/Contactpage/2" class="contact">CONTACT</a>
-        <a href="/login" class="contact">LOGIN</a>
-        <a href="/register" class="contact">REGISTER</a>
         {{#each result.rows}}
           <p>{{this.firstName}}
             {{this.firstName}}
@@ -126,6 +124,15 @@
               class="contact"
             >CONTACT</a></p>
         {{/each}}
+        {{#if activeUser}}
+          <form action="/logout" method="post"><button
+              type="submit"
+              class="contact"
+            ><span>LOG-OUT</span></button></form>
+        {{else}}
+          <a href="/login" class="contact">LOGIN</a>
+          <a href="/register" class="contact">REGISTER</a>
+        {{/if}}
         <a href="#" class="cv"><span>DOWNLOAD CV</span><i
             class="fa-sharp fa-solid fa-download"
             style="color: #000000"
