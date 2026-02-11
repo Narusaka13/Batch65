@@ -106,6 +106,7 @@
           method="post"
           id="contactForm"
           class="contact-form w-100"
+          enctype="multipart/form-data"
         >
           <!-- Name Field -->
           <div class="form-field mb-3">
@@ -157,6 +158,19 @@
                 name="password"
                 class="form-control"
                 id="password"
+                placeholder="Enter your password"
+              />
+            </div>
+          </div>
+          <!-- Profile Picture Field -->
+          <div class="mb-3 form-field">
+            <label for="profile" class="form-label">Profile Picture</label>
+            <div>
+              <input
+                type="file"
+                name="proPic"
+                class="form-control"
+                id="proPic"
                 placeholder="Enter your password"
               />
             </div>

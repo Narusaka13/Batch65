@@ -4,6 +4,8 @@ import { Pool } from "pg";
 import bcrypt from "bcrypt";
 import flash from "express-flash";
 import session from "express-session";
+import multer from "multer";
+import path from "path";
 
 const db = new Pool({
   user: "neondb_owner",
@@ -16,6 +18,21 @@ const db = new Pool({
 });
 const app = express();
 const port = "3000";
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./src/assets/Uploads/Pic");
+  },
+  filename: function (req, file, cb) {
+    // const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(
+      null,
+      file.fieldname + Date.now() + path.extname(file.originalname)
+      //  '-' + uniqueSuffix
+    );
+  },
+});
+
+const upload = multer({ storage: storage });
 
 let contactData = [];
 let homeData = [
@@ -61,25 +78,25 @@ app.get("/register", register);
 app.post("/logout", logout);
 app.post("/contact", handleContact); //submit the contact form
 app.post("/login", handleLogin); //submit the login form
-app.post("/register", handleRegister); //submit the register form
+app.post("/register", upload.single("proPic"), handleRegister); //submit the register form
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
 // function
-function home(req, res) {
-  // const query = `SELECT * FROM "Contact"`;
-  // const result = await db.query(query);
-
-  // console.log(result.rows);
+async function home(req, res) {
   // console.log(req.session.Authentication);
   if (!req.session.Authentication) {
     return res.render("Homepage");
   }
+  const query = `SELECT "proFile" FROM "Authentication" WHERE "E_mail" = '${req.session.Authentication.email}'`;
+  const result = await db.query(query);
   const activeUser = {
     name: req.session.Authentication.name,
     email: req.session.Authentication.email,
+    profile: result.rows[0].proFile,
   };
+  console.log(activeUser.profile);
   res.render("Homepage", { activeUser });
 
   // console.log(activeUser);
@@ -164,6 +181,7 @@ async function handleLogin(req, res) {
 }
 async function handleRegister(req, res) {
   let { fname, lname, email, password } = req.body;
+  // return console.log(req.file.filename);
   const registered = await db.query(
     `SELECT * FROM public."Authentication" WHERE "E_mail" = '${email}'`
   );
@@ -173,7 +191,7 @@ async function handleRegister(req, res) {
     return res.redirect("/register");
   }
   const hashPW = await bcrypt.hash(password, 10);
-  const query = `INSERT INTO public."Authentication"("fName","lName","E_mail","password") VALUES ('${fname}','${lname}', '${email}', '${hashPW}')`;
+  const query = `INSERT INTO public."Authentication"("fName","lName","E_mail","password", "proFile") VALUES ('${fname}','${lname}', '${email}', '${hashPW}', '${req.file.filename}')`;
   const result = await db.query(query);
   console.log(fname, lname, email, password, hashPW);
   res.redirect("/login");
