@@ -68,20 +68,37 @@ function createTechnologyBadges(technologies) {
 function createProjectCard(project) {
   const techBadges = createTechnologyBadges(project.technologies);
 
+  // In createProjectCard function:
   return `
-    <div class="card Project col-md-6 col-lg-4" style="max-width: 19rem">
-      <img src="${project.image}" class="card-img-top" alt="${project.projectname}">
+  <div class="card Project col-md-6 col-lg-4 shadow-lg cursor-pointer" style="max-width: 19rem;">
+    <div onclick="navigateTo('detail', ${
+      project.id
+    })" class="text-decoration-none">
+      <img src="${project.image}" class="card-img-top" alt="${
+    project.projectname
+  }" style="height: 200px; object-fit: cover;">
       <div class="card-body">
         <h5 class="card-title">${project.projectname}</h5>
-        <p class="card-text fw-lighter fs-6 mb-2">${project.start} => ${project.end}</p>
+        <p class="card-text fw-lighter fs-6 mb-2">${project.start} → ${
+    project.end
+  }</p>
         <p class="card-text fw-light mb-2">${techBadges}</p>
         <p class="card-text text-truncate">${project.desc}</p>
-        <button onclick="navigateTo('detail', ${project.id})" 
-                class="btn btn-success">
-          Learn More!
-        </button>
       </div>
     </div>
+    <div class="d-flex justify-content-end gap-2">
+      <button onclick="editProject(${project.id})" 
+              class="btn btn-warning btn-sm">
+        Edit
+      </button>
+      <button onclick="confirmDelete(${
+        project.id
+      }, '${project.projectname.replace(/'/g, "\\'")}')" 
+              class="btn btn-outline-danger btn-sm">
+        Delete
+      </button>
+    </div>
+  </div>
   `;
 }
 // Delete Main Function Logic //

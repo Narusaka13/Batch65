@@ -114,3 +114,16 @@ body {
   border-radius: 12px;
   display: inline-block;
 }
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; /* Bootstrap's shadow-lg value */
+}
+
+/* Ensure cursor pointer on clickable area */
+.cursor-pointer {
+  cursor: pointer;
+}

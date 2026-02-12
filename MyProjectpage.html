@@ -319,82 +319,41 @@
       </div>
       <div id="userlist" class="row gap-3 justify-content-center">
         <div
-          class="card Project col-md-6 col-lg-4"
+          class="card Project col-md-6 col-lg-4 shadow-lg cursor-pointer"
           data-placeholder="true"
           style="max-width: 19rem"
         >
-          <img src="..." class="card-img-top" alt="..." />
-          <div class="card-body">
-            <h5 class="card-title">Dumbways Web</h5>
-            <p class="card-text fw-lighter fs-6 mb-2">
-              2026-01-26 => 2026-02-01
-            </p>
-            <p class="card-text fw-light mb-2">
-              <span class="badge bg-success me-1">Node Js</span>
-              <span class="badge bg-success me-1">React Js</span>
-            </p>
-            <p class="card-text text-truncate">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum,
-              accusantium modi possimus itaque doloribus corporis soluta facilis
-              sit illum quaerat vel nemo voluptates! Cum, suscipit?
-            </p>
-            <button onclick="navigateTo('detail', -1)" class="btn btn-success">
-              Learn More!
-            </button>
-          </div>
-        </div>
-        <div
-          class="card Project col-md-6 col-lg-4"
-          data-placeholder="true"
-          style="max-width: 19rem"
-        >
-          <img src="..." class="card-img-top" alt="..." />
-          <div class="card-body">
-            <h5 class="card-title">Dumbways Web</h5>
-            <p class="card-text fw-lighter fs-6 mb-2">
-              2026-01-26 => 2026-02-01
-            </p>
-            <p class="card-text fw-light mb-2">
-              <span class="badge bg-success me-1">Node Js</span>
-              <span class="badge bg-success me-1">React Js</span>
-            </p>
-            <p class="card-text text-truncate">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum,
-              accusantium modi possimus itaque doloribus corporis soluta facilis
-              sit illum quaerat vel nemo voluptates! Cum, suscipit?
-            </p>
-            <button onclick="navigateTo('detail',-2)" class="btn btn-success">
-              Learn More!
-            </button>
-          </div>
-        </div>
-        <div
-          data-placeholder="true"
-          class="card Project col-md-6 col-lg-4"
-          style="max-width: 19rem"
-        >
-          <img src="?" class="card-img-top" alt="${project.projectname}" />
-          <div class="card-body">
-            <h5 class="card-title">?</h5>
-            <p class="card-text fw-lighter fs-6 mb-2">? => ?</p>
-            <p class="card-text fw-light mb-2">?</p>
-            <p class="card-text text-truncate">?</p>
-            <!-- Button Group: All 3 actions inside the card -->
-            <div class="d-flex gap-2 justify-content-between mt-3">
-              <!-- Learn More button - primary action -->
-              <button
-                onclick="navigateTo('detail')"
-                class="btn btn-success flex-grow-1"
-              >
-                Learn More!
-              </button>
-              <!-- Edit button - secondary action -->
-              <button onclick="editProject()" class="btn btn-warning">
-                Edit
-              </button>
-              <!-- Delete button - destructive action -->
-              <button onclick="" class="btn btn-outline-danger">Delete</button>
+          <div onclick="navigateTo('detail', -1)" class="text-decoration-none">
+            <img
+              src="https://placehold.co/600x400/black/turquoise?text=Project+Image"
+              class="card-img-top"
+              alt="Placeholder"
+              style="height: 200px; object-fit: cover"
+            />
+            <div class="card-body">
+              <h5 class="card-title">Dumbways Web</h5>
+              <p class="card-text fw-lighter fs-6 mb-2">
+                2026-01-26 → 2026-02-01
+              </p>
+              <p class="card-text fw-light mb-2">
+                <span class="badge bg-success me-1">Node Js</span>
+                <span class="badge bg-success me-1">React Js</span>
+              </p>
+              <p class="card-text text-truncate">
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit...
+              </p>
             </div>
+          </div>
+          <div class="d-flex justify-content-end gap-2">
+            <button onclick="editProject(-1)" class="btn btn-warning btn-sm">
+              Edit
+            </button>
+            <button
+              onclick="confirmDelete(-1, 'Dumbways Web')"
+              class="btn btn-outline-danger btn-sm"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </div>
