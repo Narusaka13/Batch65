@@ -1,0 +1,305 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Project Page</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../assets/CSS/style.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#"><img
+            class="card-img-top"
+            src="https://eu4.paradoxwikis.com/images/3/37/Egypt.png"
+            alt="Frofile"
+          /></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                onclick="navigateTo('home')"
+                aria-current="page"
+                href="#"
+              >Home</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                onclick="navigateTo('projects')"
+                href="#"
+              >My Project</a>
+            </li>
+            <!-- <li class="nav-item dropdown">
+                  <a
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Dropdown
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                </li> -->
+          </ul>
+          <form class="d-flex" role="search">
+            <!-- <input
+                  class="form-control me-2"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                /> -->
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              onclick="navigateTo('contact')"
+            >
+              Contact Me!!
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="main-container col w-75 p-4">
+      <div class="contact-header w-100 text-center mb-3">
+        <h1 class="fw-bolder">ADD MY PROJECT</h1>
+        <p id="input-user">Please fill out the form below to add new project</p>
+      </div>
+      <form class="form-field w-100 mb-3" id="addproject">
+        <!-- ProjectName -->
+        <div class="mb-3">
+          <label for="ProjectName" class="form-label">Project Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="ProjectName"
+            placeholder="Enter project name"
+            required
+          />
+        </div>
+        <!-- date-range -->
+        <div class="row mb-3">
+          <div class="col">
+            <label for="start-date" class="form-label">Start Date</label>
+            <input
+              type="date"
+              id="start-date"
+              name="start-date"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="col">
+            <label for="end-date" class="form-label">End Date</label>
+            <input
+              type="date"
+              id="end-date"
+              name="end-date"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+        <!-- projects description -->
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            id="description"
+            class="form-control"
+            name="description"
+            rows="5"
+            placeholder="Describe your project here..."
+            required
+          ></textarea>
+        </div>
+        <!-- Technologies(Checklist) -->
+        <div class="mb-3">
+          <label for="technologies" class="form-label">Technologies</label>
+          <div class="row d-flex">
+            <!-- nodejs -->
+            <div class="col-lg-3 col-md-6">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value="Node Js"
+                  id="nodejscheck"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Node Js
+                </label>
+              </div>
+            </div>
+            <!-- reactjs -->
+            <div class="col-lg-3 col-md-6">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value="React Js"
+                  id="reactjscheck"
+                />
+                <label class="form-check-label" for="checkDefault">
+                  React Js
+                </label>
+              </div>
+            </div>
+            <!-- NextJS -->
+            <div class="col-lg-3 col-md-6">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value="Next Js"
+                  id="nextjscheck"
+                />
+                <label class="form-check-label" for="checkChecked">
+                  Next Js
+                </label>
+              </div>
+            </div>
+            <!-- TypeScript -->
+            <div class="col-lg-3 col-md-6">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value="TypeScript"
+                  id="typescriptcheck"
+                />
+                <label class="form-check-label" for="checkChecked">
+                  TypeScript
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Upload Image -->
+        <div class="mb-3">
+          <label for="image-upload" class="form-label">Upload Image</label>
+          <input
+            class="form-control input-group-text"
+            type="file"
+            id="upload-area"
+            multiple
+          />
+        </div>
+        <!-- Submit Button -->
+        <div class="form-submit text-center mb-3">
+          <button type="submit" class="submit-btn btn btn-primary">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- My Project -->
+    <div class="main-container row w-75 p-3">
+      <h1 class="fw-bolder col-12 text-center">MY PROJECT</h1>
+      <div id="userlist" class="row gap-3 justify-content-center">
+        <div
+          class="card Project col-md-6 col-lg-4"
+          data-placeholder="true"
+          style="max-width: 19rem"
+        >
+          <img src="..." class="card-img-top" alt="..." />
+          <div class="card-body">
+            <h5 class="card-title">Dumbways Web</h5>
+            <p class="card-text fw-lighter fs-6 mb-2">
+              2026-01-26 => 2026-02-01
+            </p>
+            <p class="card-text fw-light mb-2">
+              <span class="badge bg-success me-1">Node Js</span>
+              <span class="badge bg-success me-1">React Js</span>
+            </p>
+            <p class="card-text text-truncate">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum,
+              accusantium modi possimus itaque doloribus corporis soluta facilis
+              sit illum quaerat vel nemo voluptates! Cum, suscipit?
+            </p>
+            <button
+              onclick="navigateTo('detail', {{-1}})"
+              class="btn btn-success"
+            >
+              Learn More!
+            </button>
+          </div>
+        </div>
+        <div
+          class="card Project col-md-6 col-lg-4"
+          data-placeholder="true"
+          style="max-width: 19rem"
+        >
+          <img src="..." class="card-img-top" alt="..." />
+          <div class="card-body">
+            <h5 class="card-title">Dumbways Web</h5>
+            <p class="card-text fw-lighter fs-6 mb-2">
+              2026-01-26 => 2026-02-01
+            </p>
+            <p class="card-text fw-light mb-2">
+              <span class="badge bg-success me-1">Node Js</span>
+              <span class="badge bg-success me-1">React Js</span>
+            </p>
+            <p class="card-text text-truncate">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum,
+              accusantium modi possimus itaque doloribus corporis soluta facilis
+              sit illum quaerat vel nemo voluptates! Cum, suscipit?
+            </p>
+            <button
+              onclick="navigateTo('detail',{{-2}})"
+              class="btn btn-success"
+            >
+              Learn More!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="text-center fw-bold">Narusaka@2026</footer>
+    <!-- JavaScript Files -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <script src="../assets/JS/index.js"></script>
+  </body>
+</html>
