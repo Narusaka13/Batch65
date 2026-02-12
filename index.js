@@ -7,6 +7,7 @@ import session from "express-session";
 import multer from "multer";
 import path from "path";
 
+//Global Variables
 const db = new Pool({
   user: "neondb_owner",
   password: "npg_DkJVh4rm2HTf",
@@ -31,28 +32,27 @@ const storage = multer.diskStorage({
     );
   },
 });
-
 const upload = multer({ storage: storage });
 
-let contactData = [];
-let homeData = [
-  {
-    id: 1,
-    title: "project1",
-  },
-  {
-    id: 2,
-    title: "project2",
-  },
-  {
-    id: 3,
-    title: "project3",
-  },
-  {
-    id: 4,
-    title: "project4",
-  },
-];
+// let contactData = [];
+// let homeData = [
+//   {
+//     id: 1,
+//     title: "project1",
+//   },
+//   {
+//     id: 2,
+//     title: "project2",
+//   },
+//   {
+//     id: 3,
+//     title: "project3",
+//   },
+//   {
+//     id: 4,
+//     title: "project4",
+//   },
+// ];
 
 app.set("view engine", "hbs");
 app.set("views", "src/views");
@@ -67,6 +67,7 @@ app.use(
   })
 );
 
+//Routes
 app.get("/", home);
 app.get("/contact", contact);
 app.get("/projects", projects);
@@ -74,15 +75,14 @@ app.get("/detail", details);
 // app.get("/Contactpage/:id", contactpageGet);
 app.get("/login", login);
 app.get("/register", register);
-
 app.post("/logout", logout);
 app.post("/contact", handleContact); //submit the contact form
 app.post("/login", handleLogin); //submit the login form
 app.post("/register", upload.single("proPic"), handleRegister); //submit the register form
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
+
 // function
 async function home(req, res) {
   // console.log(req.session.Authentication);
@@ -103,15 +103,15 @@ async function home(req, res) {
 }
 function contact(req, res) {
   const phoneNumber = 6287839056763;
-  if (!req.session.Authentication) {
-    return res.render("login");
-  }
+  // if (!req.session.Authentication) {
+  //   return res.render("login");
+  // }
   res.render("Contactpage", { phoneNumber });
 }
 function projects(req, res) {
-  if (!req.session.Authentication) {
-    return res.render("login");
-  }
+  // if (!req.session.Authentication) {
+  //   return res.render("login");
+  // }
   res.render("MyProjectpage");
 }
 function details(req, res) {
