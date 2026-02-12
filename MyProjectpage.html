@@ -368,6 +368,35 @@
             </button>
           </div>
         </div>
+        <div
+          data-placeholder="true"
+          class="card Project col-md-6 col-lg-4"
+          style="max-width: 19rem"
+        >
+          <img src="?" class="card-img-top" alt="${project.projectname}" />
+          <div class="card-body">
+            <h5 class="card-title">?</h5>
+            <p class="card-text fw-lighter fs-6 mb-2">? => ?</p>
+            <p class="card-text fw-light mb-2">?</p>
+            <p class="card-text text-truncate">?</p>
+            <!-- Button Group: All 3 actions inside the card -->
+            <div class="d-flex gap-2 justify-content-between mt-3">
+              <!-- Learn More button - primary action -->
+              <button
+                onclick="navigateTo('detail')"
+                class="btn btn-success flex-grow-1"
+              >
+                Learn More!
+              </button>
+              <!-- Edit button - secondary action -->
+              <button onclick="editProject()" class="btn btn-warning">
+                Edit
+              </button>
+              <!-- Delete button - destructive action -->
+              <button onclick="" class="btn btn-outline-danger">Delete</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <footer class="text-center fw-bold">Narusaka@2026</footer>

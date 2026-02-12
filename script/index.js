@@ -84,6 +84,138 @@ function createProjectCard(project) {
     </div>
   `;
 }
+// Delete Main Function Logic //
+// Delete comfirmation logic
+function confirmDelete(projectId, projectName) {
+  // Show confirmation dialog
+  const isConfirmed = confirm(`Delete "${projectName}"?`);
+  // conditional to delete the project
+  if (isConfirmed) {
+    deleteProject(projectId);
+  }
+}
+// Delete Project Logic
+function deleteProject(projectId) {
+  // Get all projects from localStorage
+  const allProjects = getProjectsFromStorage();
+  // Filtering by projectId. Creat a new array without the deleted project
+  const updatedProjects = allProjects.filter(
+    (project) => project.id !== Number(projectId)
+  );
+  // Save the updated projects to localStorage
+  saveProjectsToStorage(updatedProjects);
+  // Show success message
+  alert("Project deleted successfully");
+  // Rerreder the projects
+  refreshProjects();
+  // logic if deleted project is currently being edited (additional logic)
+  if (isEditMode && currentEditId === Number(projectId)) {
+    exitEditMode();
+  }
+}
+// Edit Project Logic //
+// Project Card Editning Logic
+function editProject(projectId) {
+  // Get project from localStorage
+  const project = getProjectById(projectId);
+  // Verify Saved Project in LocalStorage
+  if (!project) {
+    alert("Project not found!");
+    return;
+  }
+  // Mode Scwitching Logic
+  isEditMode = true; // Set Edit Mode
+  currentEditId = projectId; // Store edited project ID
+  // Change form title
+  const formTitle = document.querySelector(".contact-header h1");
+  if (formTitle) {
+    formTitle.innerText = "EDIT MY PROJECT";
+  }
+  // Change submit button text
+  const submitBtn = document.querySelector(".submit-btn");
+  if (submitBtn) {
+    submitBtn.innerText = "Update";
+  }
+  // Show cancel edit button
+  showCancelButton();
+  // Refilling the form with project data
+  document.getElementById("ProjectName").value = project.projectname || "";
+  document.getElementById("start-date").value = project.start || "";
+  document.getElementById("end-date").value = project.end || "";
+  document.getElementById("description").value = project.desc || "";
+  // Uncehck all checkboxes
+  const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+  allCheckboxes.forEach((checkbox) => (checkbox.checked = false));
+  // Recheck the Checkboxes with project technologies
+  if (project.technologies && Array.isArray(project.technologies)) {
+    project.technologies.forEach((tech) => {
+      // Find checkbox with matching value (case-insensitive)
+      const checkbox = Array.from(allCheckboxes).find(
+        (cb) => cb.value.toLowerCase() === tech.toLowerCase()
+      );
+      if (checkbox) checkbox.checked = true;
+    });
+  }
+  // Form Scrolling Logic
+  const formElement = document.getElementById("addproject");
+  if (formElement) {
+    formElement.scrollIntoView({ behavior: "smooth" });
+  }
+}
+// Cancel Edit Button Logic
+function showCancelButton() {
+  // Conditional Check
+  let cancelBtn = document.getElementById("cancelEditBtn");
+  if (!cancelBtn) {
+    // Create Cancel Edit Button
+    const formSubmitDiv = document.querySelector(".form-submit");
+    if (formSubmitDiv) {
+      cancelBtn = document.createElement("button");
+      cancelBtn.id = "cancelEditBtn";
+      cancelBtn.type = "button";
+      cancelBtn.className = "btn btn-secondary ms-2";
+      cancelBtn.innerText = "Cancel";
+      cancelBtn.onclick = exitEditMode; // Event Handler
+      // Add button after the submit button
+      formSubmitDiv.appendChild(cancelBtn);
+    }
+  } else {
+    // Show Cancel Edit Button
+    cancelBtn.style.display = "inline-block";
+  }
+}
+
+// Exit Edit Mode Logic
+function exitEditMode() {
+  // Reset Mode
+  isEditMode = false;
+  currentEditId = null;
+  // Clearing the form
+  const form = document.getElementById("addproject");
+  if (form) {
+    form.reset();
+  }
+  // Reset Form Title
+  const formTitle = document.querySelector(".contact-header h1");
+  if (formTitle) {
+    formTitle.innerText = "ADD MY PROJECT";
+  }
+  // Reset Submit Button
+  const submitBtn = document.querySelector(".submit-btn");
+  if (submitBtn) {
+    submitBtn.innerText = "Submit";
+  }
+  // Hide Cancel Edit Button
+  const cancelBtn = document.getElementById("cancelEditBtn");
+  if (cancelBtn) {
+    cancelBtn.style.display = "none";
+  }
+  // Clear Success Message
+  const inputUser = document.getElementById("input-user");
+  if (inputUser) {
+    inputUser.innerHTML = "Please fill out the form below to add new project";
+  }
+}
 // No Results Message
 function createNoResultsMessage() {
   return `
@@ -149,7 +281,6 @@ function applyFilters(projects) {
   ) {
     return projects;
   }
-
   return projects.filter((project) => {
     // Technology filter
     if (currentFilter.length > 0 && !currentFilter.includes("all")) {
@@ -175,10 +306,14 @@ function applyFilters(projects) {
     return true;
   });
 }
+
 // Sorting Logic
 //sort variables
 let sortField = "name";
 let sortOrder = "asc";
+// Defined the form mode, either adding (false) or editing (true)
+let isEditMode = false; // form adding by default
+let currentEditId = null; // Store edited project id
 
 // Sorting function
 function sortProjects(projects) {
@@ -310,7 +445,6 @@ function handleSearchInput(event) {
 
 function handleFormSubmit(event) {
   event.preventDefault();
-
   // Get form data
   const projectData = {
     projectname: document.getElementById("ProjectName").value.trim(),
@@ -328,22 +462,48 @@ function handleFormSubmit(event) {
     alert(error);
     return;
   }
+  // Conditional Check
+  if (isEditMode && currentEditId) {
+    // Editing Project Logic
+    // Get all projects
+    const allProjects = getProjectsFromStorage();
+    // Find updated project index
+    const projectIndex = allProjects.findIndex(
+      (p) => p.id === Number(currentEditId)
+    );
+    // CONDITIONAL CHECK
+    if (projectIndex !== -1) {
+      // Update project data with same original ID
+      allProjects[projectIndex] = {
+        ...projectData, // New data from form
+        id: currentEditId, // Keep original ID
+      };
+      // Save to localStorage
+      saveProjectsToStorage(allProjects);
+      // Show success alert
+      alert("Project updated successfully!");
+      // Exit editing and reset form
+      exitEditMode();
+    } else {
+      alert("Error: Project not found for update");
+    }
+  } else {
+    // Add Project Logic
+    const newProject = {
+      id: getNextProjectId(),
+      ...projectData,
+    };
+    //Add project to localStorage
+    const allProjects = getProjectsFromStorage();
+    allProjects.push(newProject);
+    saveProjectsToStorage(allProjects);
+    // Reset form
+    event.target.reset();
 
-  // Save project
-  const newProject = {
-    id: getNextProjectId(),
-    ...projectData,
-  };
-
-  const allProjects = getProjectsFromStorage();
-  allProjects.push(newProject);
-  saveProjectsToStorage(allProjects);
-
-  // Reset form
-  event.target.reset();
-
-  // Show success message
-  showSuccessMessage("New project has been added!");
+    // Show success alert
+    alert("New project has been added!");
+    showSuccessMessage("New project has been added!");
+  }
   refreshProjects();
 }
 
