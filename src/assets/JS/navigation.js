@@ -14,3 +14,13 @@ function navigateTo(page, projectId = null) {
     window.location.href = pages[page] || "/";
   }
 }
+function confirmDelete(projectId, projectName) {
+  if (confirm(`Are you sure you want to delete "${projectName}"?`)) {
+    // Create a form to submit POST request
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = `/projects/delete/${projectId}`;
+    document.body.appendChild(form);
+    form.submit();
+  }
+}
