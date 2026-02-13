@@ -98,13 +98,41 @@
         </div>
       </div>
     </nav>
+    {{#if message}}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{message}}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    {{/if}}
 
+    {{!-- {{#if success}}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{success}}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    {{/if}} --}}
     <div class="main-container col w-75 p-4">
       <div class="contact-header w-100 text-center mb-3">
         <h1 class="fw-bolder">ADD MY PROJECT</h1>
         <p id="input-user">Please fill out the form below to add new project</p>
       </div>
-      <form class="form-field w-100 mb-3" id="addproject">
+      <form
+        class="form-field w-100 mb-3"
+        id="addproject"
+        action="/projects"
+        method="post"
+        enctype="multipart/form-data"
+      >
         <!-- ProjectName -->
         <div class="mb-3">
           <label for="ProjectName" class="form-label">Project Name</label>
@@ -112,6 +140,7 @@
             type="text"
             class="form-control"
             id="ProjectName"
+            name="projectname"
             placeholder="Enter project name"
             required
           />
@@ -123,7 +152,7 @@
             <input
               type="date"
               id="start-date"
-              name="start-date"
+              name="start"
               class="form-control"
               required
             />
@@ -133,7 +162,7 @@
             <input
               type="date"
               id="end-date"
-              name="end-date"
+              name="end"
               class="form-control"
               required
             />
@@ -145,7 +174,7 @@
           <textarea
             id="description"
             class="form-control"
-            name="description"
+            name="desc"
             rows="5"
             placeholder="Describe your project here..."
             required
@@ -163,6 +192,7 @@
                   type="checkbox"
                   value="Node Js"
                   id="nodejscheck"
+                  name="technologies"
                 />
                 <label class="form-check-label" for="defaultCheck1">
                   Node Js
@@ -177,6 +207,7 @@
                   type="checkbox"
                   value="React Js"
                   id="reactjscheck"
+                  name="technologies"
                 />
                 <label class="form-check-label" for="checkDefault">
                   React Js
@@ -191,6 +222,7 @@
                   type="checkbox"
                   value="Next Js"
                   id="nextjscheck"
+                  name="technologies"
                 />
                 <label class="form-check-label" for="checkChecked">
                   Next Js
@@ -205,6 +237,7 @@
                   type="checkbox"
                   value="TypeScript"
                   id="typescriptcheck"
+                  name="technologies"
                 />
                 <label class="form-check-label" for="checkChecked">
                   TypeScript
@@ -220,7 +253,8 @@
             class="form-control input-group-text"
             type="file"
             id="upload-area"
-            multiple
+            name="image"
+            single
           />
         </div>
         <!-- Submit Button -->
@@ -327,7 +361,7 @@
               style="height: 200px; object-fit: cover"
             />
             <div class="card-body">
-              <h5 class="card-title">Dumbways Web</h5>
+              <h5 class="card-title text-truncate">Dumbways Web</h5>
               <p class="card-text fw-lighter fs-6 mb-2">
                 2026-01-26 → 2026-02-01
               </p>
@@ -352,6 +386,49 @@
             </button>
           </div>
         </div>
+        {{#each projects}}
+          <div
+            class="card Project col-md-6 col-lg-4 shadow-lg cursor-pointer"
+            data-placeholder="true"
+            style="max-width: 19rem"
+          >
+            <div
+              onclick="navigateTo('detail',{{this.id}})"
+              class="text-decoration-none"
+            >
+              <img
+                src="../assets/Uploads/projects/temp/{{this.image}}"
+                class="card-img-top"
+                alt="{{this.projectname}}"
+                style="height: 200px; object-fit: cover"
+              />
+              <div class="card-body">
+                <h5 class="card-title text-truncate">Dumbways Web</h5>
+                <p class="card-text fw-lighter fs-6 mb-2">
+                  2026-01-26 → 2026-02-01
+                </p>
+                <p class="card-text fw-light mb-2">
+                  <span class="badge bg-success me-1">Node Js</span>
+                  <span class="badge bg-success me-1">React Js</span>
+                </p>
+                <p class="card-text text-truncate">
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit...
+                </p>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button onclick="editProject(-1)" class="btn btn-warning btn-sm">
+                Edit
+              </button>
+              <button
+                onclick="confirmDelete(-1, 'Dumbways Web')"
+                class="btn btn-outline-danger btn-sm"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        {{/each}}
       </div>
     </div>
     <footer class="text-center fw-bold">Narusaka@2026</footer>
@@ -361,6 +438,6 @@
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
-    <script src="../assets/JS/index.js"></script>
+    {{! <script src="../assets/JS/index.js"></script> }}
   </body>
 </html>

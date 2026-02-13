@@ -21,7 +21,9 @@ const app = express();
 const port = "3000";
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./src/assets/Uploads/Pic");
+    // cb(null, "./src/assets/Uploads/Pic");//for user profile picture
+    cb(null, "./src/assets/Uploads/projects/temp"); //for temporaty project image
+    // cb(null, "./src/assets/Uploads/projects/db");//for database project image
   },
   filename: function (req, file, cb) {
     // const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -33,7 +35,7 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
-
+let projectssaved = [];
 // let contactData = [];
 // let homeData = [
 //   {
@@ -79,6 +81,7 @@ app.post("/logout", logout);
 app.post("/contact", handleContact); //submit the contact form
 app.post("/login", handleLogin); //submit the login form
 app.post("/register", upload.single("proPic"), handleRegister); //submit the register form
+app.post("/projects", upload.single("proPic"), handleProjects);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
@@ -112,7 +115,10 @@ function projects(req, res) {
   // if (!req.session.Authentication) {
   //   return res.render("login");
   // }
-  res.render("MyProjectpage");
+  res.render("MyProjectpage", {
+    projects: projectssaved,
+    message: req.flash("error"),
+  });
 }
 function details(req, res) {
   res.render("Detailpage");
@@ -199,4 +205,36 @@ async function handleRegister(req, res) {
 function logout(req, res) {
   req.session.destroy();
   return res.redirect("/");
+}
+function handleProjects(req, res) {
+  let { projectname, start, end, desc, technologies } = req.body;
+  if (!projectname || !start || !end || !desc) {
+    req.flash("error", "Please fill all required fields");
+    return res.redirect("/projects");
+  }
+  // Handle technologies array
+  let techArray = [];
+  if (technologies) {
+    techArray = Array.isArray(technologies) ? technologies : [technologies];
+  }
+  // Handle image filename with default option
+  let imagefile = null;
+  if (req.file) {
+    imagefile = req.file.filename;
+  } else {
+    imagefile = "1.png";
+  }
+  const projectid = Date.now();
+  const newProject = {
+    id: projectid,
+    projectname,
+    start,
+    end,
+    desc,
+    technologies: techArray,
+    image: imagefile,
+  };
+  projectssaved.push(newProject);
+  console.log(projectssaved);
+  // res.redirect("/projects");
 }

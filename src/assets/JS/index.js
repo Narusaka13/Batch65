@@ -1,21 +1,4 @@
 // ============ GLOBAL FUNCTIONS ============//
-
-// LOGIC FOR navigation.js //
-function navigateTo(page, projectId = null) {
-  // Map pages URLs
-  const pages = {
-    home: "/",
-    projects: "/projects",
-    contact: "/contact",
-    detail: "/detail",
-  };
-  // Go to the page with navigating to detail page
-  if (page === "detail" && projectId) {
-    window.location.href = `${pages.detail}?id=${projectId}`;
-  } else {
-    window.location.href = pages[page] || "Homepage";
-  }
-}
 // Storage functions - used on multiple pages
 function getProjectsFromStorage() {
   return JSON.parse(localStorage.getItem("projects")) || [];
@@ -78,7 +61,7 @@ function createProjectCard(project) {
     project.projectname
   }" style="height: 200px; object-fit: cover;">
       <div class="card-body">
-        <h5 class="card-title">${project.projectname}</h5>
+        <h5 class="card-title text-truncate">${project.projectname}</h5>
         <p class="card-text fw-lighter fs-6 mb-2">${project.start} → ${
     project.end
   }</p>
@@ -588,7 +571,7 @@ if (container) {
       <div class="alert alert-danger">
         <h4>${message}</h4>
         <p>${details}</p>
-        <a href="MyProjectpage.html" class="btn btn-primary">Back to Projects</a>
+        <a href="#" onclick="navigateTo('projects')" class="btn btn-primary">Back to Projects</a>
       </div>
     `;
   }
@@ -608,3 +591,34 @@ if (container) {
     }
   }
 }
+// export all functions
+export {
+  getProjectsFromStorage,
+  saveProjectsToStorage,
+  getProjectById,
+  getNextProjectId,
+  validateProjectForm,
+  createTechnologyBadges,
+  createProjectCard,
+  createNoResultsMessage,
+  createInitialEmptyState,
+  confirmDelete,
+  deleteProject,
+  editProject,
+  showCancelButton,
+  exitEditMode,
+  getFilterState,
+  setFilter,
+  setSearch,
+  resetFilters,
+  applyFilters,
+  updateFilterButtons,
+  sortProjects,
+  updateSorting,
+  refreshProjects,
+  renderProjects,
+  handleFilterButtonClick,
+  handleSearchInput,
+  handleFormSubmit,
+  navigateTo,
+};
