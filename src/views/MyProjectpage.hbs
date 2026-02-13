@@ -403,16 +403,19 @@
                 style="height: 200px; object-fit: cover"
               />
               <div class="card-body">
-                <h5 class="card-title text-truncate">Dumbways Web</h5>
+                <h5 class="card-title text-truncate">{{this.projectname}}</h5>
                 <p class="card-text fw-lighter fs-6 mb-2">
-                  2026-01-26 → 2026-02-01
+                  {{this.start}}
+                  →
+                  {{this.end}}
                 </p>
                 <p class="card-text fw-light mb-2">
-                  <span class="badge bg-success me-1">Node Js</span>
-                  <span class="badge bg-success me-1">React Js</span>
+                  {{#each this.technologies}}
+                    <span class="badge bg-success me-1">{{this}}</span>
+                  {{/each}}
                 </p>
                 <p class="card-text text-truncate">
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit...
+                  {{this.desc}}
                 </p>
               </div>
             </div>
@@ -439,5 +442,6 @@
       crossorigin="anonymous"
     ></script>
     {{! <script src="../assets/JS/index.js"></script> }}
+    <script src="../assets/JS/navigation.js"></script>
   </body>
 </html>

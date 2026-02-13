@@ -73,7 +73,7 @@ app.use(
 app.get("/", home);
 app.get("/contact", contact);
 app.get("/projects", projects);
-app.get("/detail", details);
+app.get("/detail/:id", details);
 // app.get("/Contactpage/:id", contactpageGet);
 app.get("/login", login);
 app.get("/register", register);
@@ -81,7 +81,8 @@ app.post("/logout", logout);
 app.post("/contact", handleContact); //submit the contact form
 app.post("/login", handleLogin); //submit the login form
 app.post("/register", upload.single("proPic"), handleRegister); //submit the register form
-app.post("/projects", upload.single("proPic"), handleProjects);
+app.post("/projects", upload.single("image"), handleProjects);
+app.post("/projects/delete/:id", deleteProject);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
@@ -121,7 +122,37 @@ function projects(req, res) {
   });
 }
 function details(req, res) {
-  res.render("Detailpage");
+  const projectId = parseInt(req.params.id);
+  if (!projectId) {
+    req.flash("error", "No project ID provided");
+    return res.redirect("/projects");
+  }
+  const project = projectssaved.find((p) => p.id === projectId);
+  if (!project) {
+    req.flash("error", "Project not found");
+    return res.redirect("/projects");
+  }
+  // Format dates for display
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+  // Calculate duration
+  const startDate = new Date(project.start);
+  const endDate = new Date(project.end);
+  const durationDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+  res.render("Detailpage", {
+    project: {
+      ...project,
+      formattedStartDate: formatDate(project.start),
+      formattedEndDate: formatDate(project.end),
+      duration: durationDays,
+    },
+  });
 }
 async function handleContact(req, res) {
   // console.log(req.body);
@@ -236,5 +267,17 @@ function handleProjects(req, res) {
   };
   projectssaved.push(newProject);
   console.log(projectssaved);
-  // res.redirect("/projects");
+  res.redirect("/projects");
+}
+function deleteProject(req, res) {
+  const projectId = parseInt(req.params.id);
+  const projectIndex = projectssaved.findIndex((p) => p.id === projectId);
+  if (projectIndex === -1) {
+    req.flash("error", "Project not found");
+    return res.redirect("/projects");
+  }
+  //Remove project from array
+  projectssaved.splice(projectIndex, 1);
+  req.flash("success", "Project deleted successfully");
+  res.redirect("/projects");
 }

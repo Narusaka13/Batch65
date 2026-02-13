@@ -9,9 +9,8 @@ function navigateTo(page, projectId = null) {
   };
   // Go to the page with navigating to detail page
   if (page === "detail" && projectId) {
-    window.location.href = `${pages.detail}?id=${projectId}`;
+    window.location.href = `${pages.detail}/${projectId}`;
   } else {
     window.location.href = pages[page] || "/";
   }
 }
-export { navigateTo };
