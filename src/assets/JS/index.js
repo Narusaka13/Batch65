@@ -591,34 +591,3 @@ if (container) {
     }
   }
 }
-// export all functions
-export {
-  getProjectsFromStorage,
-  saveProjectsToStorage,
-  getProjectById,
-  getNextProjectId,
-  validateProjectForm,
-  createTechnologyBadges,
-  createProjectCard,
-  createNoResultsMessage,
-  createInitialEmptyState,
-  confirmDelete,
-  deleteProject,
-  editProject,
-  showCancelButton,
-  exitEditMode,
-  getFilterState,
-  setFilter,
-  setSearch,
-  resetFilters,
-  applyFilters,
-  updateFilterButtons,
-  sortProjects,
-  updateSorting,
-  refreshProjects,
-  renderProjects,
-  handleFilterButtonClick,
-  handleSearchInput,
-  handleFormSubmit,
-  navigateTo,
-};
