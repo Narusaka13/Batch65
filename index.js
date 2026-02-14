@@ -6,8 +6,13 @@ import flash from "express-flash";
 import session from "express-session";
 import multer from "multer";
 import path from "path";
+import hbs from "hbs";
 
 //Global Variables
+// Register helper
+hbs.registerHelper("includes", function (array, value) {
+  return array && Array.isArray(array) && array.includes(value);
+});
 const db = new Pool({
   user: "neondb_owner",
   password: "npg_DkJVh4rm2HTf",
@@ -77,11 +82,13 @@ app.get("/detail/:id", details);
 // app.get("/Contactpage/:id", contactpageGet);
 app.get("/login", login);
 app.get("/register", register);
+app.get("/projects/edit/:id", editProject);
 app.post("/logout", logout);
 app.post("/contact", handleContact); //submit the contact form
 app.post("/login", handleLogin); //submit the login form
 app.post("/register", upload.single("proPic"), handleRegister); //submit the register form
 app.post("/projects", upload.single("image"), handleProjects);
+app.post("/projects/update/:id", upload.single("image"), updateProject);
 app.post("/projects/delete/:id", deleteProject);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
@@ -119,6 +126,7 @@ function projects(req, res) {
   res.render("MyProjectpage", {
     projects: projectssaved,
     message: req.flash("error"),
+    success: req.flash("success"),
   });
 }
 function details(req, res) {
@@ -279,5 +287,57 @@ function deleteProject(req, res) {
   //Remove project from array
   projectssaved.splice(projectIndex, 1);
   req.flash("success", "Project deleted successfully");
+  res.redirect("/projects");
+}
+function editProject(req, res) {
+  const projectId = parseInt(req.params.id);
+  const project = projectssaved.find((p) => p.id === projectId);
+  if (!project) {
+    req.flash("error", "Project not found");
+    return res.redirect("/projects");
+  }
+  // Mode Scwitching Logic
+  res.render("MyProjectpage", {
+    projects: projectssaved,
+    editProject: project,
+    isEditMode: true,
+    message: req.flash("error"),
+    success: req.flash("success"),
+  });
+}
+function updateProject(req, res) {
+  const projectId = parseInt(req.params.id);
+  let { projectname, start, end, desc, technologies } = req.body;
+  //find project
+  const projectIndex = projectssaved.findIndex((p) => p.id === projectId);
+  if (projectIndex === -1) {
+    req.flash("error", "Project not found");
+    return res.redirect("/projects");
+  }
+  if (!projectname || !start || !end || !desc) {
+    req.flash("error", "Please fill out the form below to update project");
+    return res.redirect("/projects");
+  }
+  // Handle technologies array
+  let techArray = [];
+  if (technologies) {
+    techArray = Array.isArray(technologies) ? technologies : [technologies];
+  }
+  // Handle image filename with default option
+  let imagefile = null;
+  if (req.file) {
+    imagefile = req.file.filename;
+  }
+  // Update project
+  projectssaved[projectIndex] = {
+    id: projectId,
+    projectname,
+    start,
+    end,
+    desc,
+    technologies: techArray,
+    image: imagefile,
+  };
+  req.flash("success", "Project updated successfully");
   res.redirect("/projects");
 }
