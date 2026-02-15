@@ -267,7 +267,6 @@ async function handleLogin(req, res) {
     email: registered.rows[0].E_mail,
   };
   res.redirect("/");
-  // req.session.destroy();
 }
 async function handleRegister(req, res) {
   let { fname, lname, email, password } = req.body;
@@ -309,15 +308,6 @@ async function handleProjects(req, res) {
     imagefile = "1.png";
   }
   const projectid = Date.now();
-  const newProject = {
-    id: projectid,
-    projectname,
-    start,
-    end,
-    desc,
-    technologies: techArray,
-    image: imagefile,
-  };
   const techValues = techArray.map((tech) => `'${tech}'`).join(", ");
   const checkTechQuery = `SELECT id,name FROM technologies WHERE name IN (${techValues})`;
   const checkTechResult = await db.query(checkTechQuery);
@@ -423,10 +413,7 @@ async function updateProject(req, res) {
     // No new image - keep the existing one from database
     imagefile = checkResult.rows[0].image;
   } else {
-    // imagefile = "1.png"; // default image
-    req.flash("error", "Picture not found");
-    console.log(checkResult.rows[0]);
-    return res.redirect("/projects");
+    imagefile = "1.png"; // default image
   }
   // Update project
   const updateProjectQuery = `
