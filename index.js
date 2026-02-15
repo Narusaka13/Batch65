@@ -40,7 +40,6 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
-let projectssaved = [];
 
 app.set("view engine", "hbs");
 app.set("views", "src/views");
@@ -76,7 +75,6 @@ app.listen(port, () => {
 
 // function
 async function home(req, res) {
-  // console.log(req.session.Authentication);
   if (!req.session.Authentication) {
     return res.render("Homepage");
   }
@@ -89,8 +87,6 @@ async function home(req, res) {
   };
   console.log(result.rows);
   res.render("Homepage", { activeUser });
-
-  // console.log(activeUser);
 }
 function contact(req, res) {
   const phoneNumber = 6287839056763;
@@ -100,6 +96,9 @@ function contact(req, res) {
   res.render("Contactpage", { phoneNumber });
 }
 async function projects(req, res) {
+  // if (!req.session.Authentication) {
+  //   return res.render("login");
+  // }
   const query = `
   SELECT 
   p.id,
@@ -176,7 +175,6 @@ GROUP BY p.id
   }
   const project = result.rows[0];
   // Format dates for display
-
   const formattedProjects = {
     ...project,
     // Format dates to YYYY-MM-DD if they're Date objects
@@ -195,7 +193,6 @@ GROUP BY p.id
         })
       : "",
   };
-
   // Calculate duration
   const startDate = new Date(project.start);
   const endDate = new Date(project.end);
@@ -208,35 +205,19 @@ GROUP BY p.id
   });
 }
 async function handleContact(req, res) {
-  // console.log(req.body);
-  // usual standard way of handling the data
-  // let contactData = {
-  //   fname: req.body.fname,
-  //   lname: req.body.lname,
-  //   email: req.body.email,
-  // };
-  // object destructuring to get the values //
   let { fname, lname, email } = req.body;
-  // console.log(fname, lname, email);
   let contact = {
     fname,
     lname,
     email,
   };
-  // contactData.push(contact);
-  // console.log(contactData);
-  // console.log("Data received from contact form!");
-  // res.redirect("/");
   const query = `INSERT INTO "Contact" ("firstName","lastName","E-mail") VALUES ('${contact.fname}','${contact.lname}', '${contact.email}')`;
-  // const query = `SELECT * FROM "Contact"`;
   const result2 = await db.query(query);
   console.log(result2.rows);
   res.redirect("/");
 }
 function contactpageGet(req, res) {
-  // console.log(req.params.id);
   let { id } = req.params;
-
   // // res.render("Contactpage", { phoneNumber: req.params.id });
   let result = homeData.find((element) => element.id == id);
   console.log(result);
@@ -261,7 +242,6 @@ async function handleLogin(req, res) {
     req.flash("error", "Wrong Password");
     return res.redirect("/login");
   }
-  // console.log(email, password);
   req.session.Authentication = {
     name: registered.rows[0].fName,
     email: registered.rows[0].E_mail,
@@ -270,7 +250,6 @@ async function handleLogin(req, res) {
 }
 async function handleRegister(req, res) {
   let { fname, lname, email, password } = req.body;
-  // return console.log(req.file.filename);
   const registered = await db.query(
     `SELECT * FROM public."Authentication" WHERE "E_mail" = '${email}'`
   );
