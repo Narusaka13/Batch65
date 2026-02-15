@@ -270,7 +270,7 @@
           <label for="image-upload" class="form-label">Uploaded Image</label>
           {{#if isEditMode}}
           <div class="mb-2">
-          <img src="/assets/Uploads/projects/temp/{{editProject.image}}" 
+          <img src="/assets/Uploads/projects/db/{{editProject.image}}" 
                alt="Current" style="max-width: 100px; max-height: 100px;">
           <small class="text-muted d-block">Current image (Upload new to replace)</small>
         </div>
@@ -296,6 +296,8 @@
       </form>
     </div>
     <!-- My Project -->
+    {{#if isEditMode}}
+    {{else}}
     <div class="main-container row w-75 p-3">
       <h1 class="fw-bolder col-12 text-center">MY PROJECT</h1>
       <!-- Filter and Sort Section -->
@@ -427,7 +429,7 @@
               class="text-decoration-none"
             >
               <img
-                src="/assets/Uploads/projects/temp/{{this.image}}"
+                src="/assets/Uploads/projects/db/{{this.image}}"
                 class="card-img-top"
                 alt="{{this.projectname}}"
                 style="height: 200px; object-fit: cover"
@@ -476,6 +478,7 @@
         {{/each}}
       </div>
     </div>
+    {{/if}}
     <footer class="text-center fw-bold">Narusaka@2026</footer>
     <!-- JavaScript Files -->
     <script

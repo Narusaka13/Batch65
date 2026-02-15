@@ -346,28 +346,62 @@ async function deleteProject(req, res) {
   req.flash("success", "Project deleted successfully");
   res.redirect("/projects");
 }
-function editProject(req, res) {
+async function editProject(req, res) {
+  // Get all projects
+  const allProjectsQuery = "SELECT * FROM projects ORDER BY id DESC";
+  const allProjectsResult = await db.query(allProjectsQuery);
+  const projectssaved = allProjectsResult.rows;
   const projectId = parseInt(req.params.id);
-  const project = projectssaved.find((p) => p.id === projectId);
-  if (!project) {
+  // Get the specific project to edit
+  const query = `
+  SELECT 
+  p.id,
+  p.project_name as projectname,
+  p.description as desc,
+  p.start_date as start,
+  p.end_date as end,
+  p.image as image,
+  COALESCE(
+    array_agg(t.name) FILTER (WHERE t.name IS NOT NULL), 
+    ARRAY[]::VARCHAR[]
+  ) as technologies
+FROM projects p
+LEFT JOIN project_technologies pt ON p.id = pt.project_id
+LEFT JOIN technologies t ON pt.technology_id = t.id
+WHERE p.id = $1
+GROUP BY p.id
+    `;
+  const result = await db.query(query, [projectId]);
+  if (result.rows.length === 0) {
     req.flash("error", "Project not found");
     return res.redirect("/projects");
+  }
+  const editProject = result.rows[0];
+  // FORMAT DATES for input
+  if (editProject.start) {
+    const startDate = new Date(editProject.start);
+    editProject.start = startDate.toISOString().split("T")[0];
+  }
+  if (editProject.end) {
+    const endDate = new Date(editProject.end);
+    editProject.end = endDate.toISOString().split("T")[0];
   }
   // Mode Scwitching Logic
   res.render("MyProjectpage", {
     projects: projectssaved,
-    editProject: project,
+    editProject: editProject,
     isEditMode: true,
     message: req.flash("error"),
     success: req.flash("success"),
   });
 }
-function updateProject(req, res) {
+async function updateProject(req, res) {
   const projectId = parseInt(req.params.id);
   let { projectname, start, end, desc, technologies } = req.body;
   //find project
-  const projectIndex = projectssaved.findIndex((p) => p.id === projectId);
-  if (projectIndex === -1) {
+  const checkQuery = "SELECT id, image FROM projects WHERE id = $1";
+  const checkResult = await db.query(checkQuery, [projectId]);
+  if (checkResult.rows.length === 0) {
     req.flash("error", "Project not found");
     return res.redirect("/projects");
   }
@@ -381,20 +415,53 @@ function updateProject(req, res) {
     techArray = Array.isArray(technologies) ? technologies : [technologies];
   }
   // Handle image filename with default option
-  let imagefile = null;
+  let imagefile;
   if (req.file) {
+    // New image uploaded
     imagefile = req.file.filename;
+  } else if (checkResult.rows[0] && checkResult.rows[0].image) {
+    // No new image - keep the existing one from database
+    imagefile = checkResult.rows[0].image;
+  } else {
+    // imagefile = "1.png"; // default image
+    req.flash("error", "Picture not found");
+    console.log(checkResult.rows[0]);
+    return res.redirect("/projects");
   }
   // Update project
-  projectssaved[projectIndex] = {
-    id: projectId,
+  const updateProjectQuery = `
+    UPDATE projects 
+    SET project_name = $1, 
+        start_date = $2, 
+        end_date = $3, 
+        description = $4, 
+        image = $5 
+    WHERE id = $6
+  `;
+  await db.query(updateProjectQuery, [
     projectname,
     start,
     end,
     desc,
-    technologies: techArray,
-    image: imagefile,
-  };
+    imagefile,
+    projectId,
+  ]);
+  // Get technology IDs
+  const techIdsQuery =
+    "SELECT id FROM technologies WHERE name = ANY($1::VARCHAR[])";
+  const techIdsResult = await db.query(techIdsQuery, [techArray]);
+  // Delete old relationships
+  const deleteTechQuery =
+    "DELETE FROM project_technologies WHERE project_id = $1";
+  await db.query(deleteTechQuery, [projectId]);
+  // Insert new relationships
+  for (const techRow of techIdsResult.rows) {
+    const insertTechQuery = `
+       INSERT INTO project_technologies (project_id, technology_id)
+       VALUES ($1, $2)
+     `;
+    await db.query(insertTechQuery, [projectId, techRow.id]);
+  }
   req.flash("success", "Project updated successfully");
   res.redirect("/projects");
 }
