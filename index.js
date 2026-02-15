@@ -6,9 +6,13 @@ import flash from "express-flash";
 import session from "express-session";
 import multer from "multer";
 import path from "path";
-import { log } from "console";
+import hbs from "hbs";
 
 //Global Variables
+// Register helper
+hbs.registerHelper("includes", function (array, value) {
+  return array && Array.isArray(array) && array.includes(value);
+});
 const db = new Pool({
   user: "neondb_owner",
   password: "npg_DkJVh4rm2HTf",
