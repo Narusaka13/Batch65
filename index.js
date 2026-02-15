@@ -328,15 +328,15 @@ async function handleProjects(req, res) {
   }
   res.redirect("/projects");
 }
-function deleteProject(req, res) {
+async function deleteProject(req, res) {
   const projectId = parseInt(req.params.id);
-  const projectIndex = projectssaved.findIndex((p) => p.id === projectId);
-  if (projectIndex === -1) {
+  //Remove project from array
+  const deleteQuery = `DELETE FROM projects WHERE id = $1 RETURNING id`;
+  const result = await db.query(deleteQuery, [projectId]);
+  if (result.rowCount === 0) {
     req.flash("error", "Project not found");
     return res.redirect("/projects");
   }
-  //Remove project from array
-  projectssaved.splice(projectIndex, 1);
   req.flash("success", "Project deleted successfully");
   res.redirect("/projects");
 }
