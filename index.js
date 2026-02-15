@@ -6,6 +6,7 @@ import flash from "express-flash";
 import session from "express-session";
 import multer from "multer";
 import path from "path";
+import { log } from "console";
 
 //Global Variables
 const db = new Pool({
@@ -22,8 +23,8 @@ const port = "3000";
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     // cb(null, "./src/assets/Uploads/Pic");//for user profile picture
-    cb(null, "./src/assets/Uploads/projects/temp"); //for temporaty project image
-    // cb(null, "./src/assets/Uploads/projects/db");//for database project image
+    // cb(null, "./src/assets/Uploads/projects/temp"); //for temporaty project image
+    cb(null, "./src/assets/Uploads/projects/db"); //for database project image
   },
   filename: function (req, file, cb) {
     // const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -36,25 +37,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 let projectssaved = [];
-// let contactData = [];
-// let homeData = [
-//   {
-//     id: 1,
-//     title: "project1",
-//   },
-//   {
-//     id: 2,
-//     title: "project2",
-//   },
-//   {
-//     id: 3,
-//     title: "project3",
-//   },
-//   {
-//     id: 4,
-//     title: "project4",
-//   },
-// ];
 
 app.set("view engine", "hbs");
 app.set("views", "src/views");
@@ -74,14 +56,13 @@ app.get("/", home);
 app.get("/contact", contact);
 app.get("/projects", projects);
 app.get("/detail/:id", details);
-// app.get("/Contactpage/:id", contactpageGet);
 app.get("/login", login);
 app.get("/register", register);
 app.post("/logout", logout);
 app.post("/contact", handleContact); //submit the contact form
 app.post("/login", handleLogin); //submit the login form
 app.post("/register", upload.single("proPic"), handleRegister); //submit the register form
-app.post("/projects", upload.single("image"), handleProjects);
+app.post("/projects", upload.single("image"), handleProjects); //submit the project form
 app.post("/projects/delete/:id", deleteProject);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
@@ -100,7 +81,7 @@ async function home(req, res) {
     email: req.session.Authentication.email,
     profile: result.rows[0].proFile,
   };
-  console.log(activeUser.profile);
+  console.log(result.rows);
   res.render("Homepage", { activeUser });
 
   // console.log(activeUser);
@@ -112,44 +93,110 @@ function contact(req, res) {
   // }
   res.render("Contactpage", { phoneNumber });
 }
-function projects(req, res) {
-  // if (!req.session.Authentication) {
-  //   return res.render("login");
-  // }
+async function projects(req, res) {
+  const query = `
+  SELECT 
+  p.id,
+  p.project_name as projectname,
+  p.description as desc,
+  p.start_date as start,
+  p.end_date as end,
+  p.image as image,
+  COALESCE(
+    array_agg(t.name) FILTER (WHERE t.name IS NOT NULL), 
+    ARRAY[]::VARCHAR[]
+  ) as technologies
+FROM projects p
+LEFT JOIN project_technologies pt ON p.id = pt.project_id
+LEFT JOIN technologies t ON pt.technology_id = t.id
+GROUP BY p.id
+ORDER BY p.created_at DESC
+    `;
+  const result = await db.query(query);
+  const projects = result.rows;
+  // Format dates for display
+  const formattedProjects = projects.map((project) => ({
+    ...project,
+    // Format dates to YYYY-MM-DD if they're Date objects
+    start: project.start
+      ? new Date(project.start).toLocaleDateString("en-GB", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      : "",
+    end: project.end
+      ? new Date(project.end).toLocaleDateString("en-GB", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      : "",
+  }));
   res.render("MyProjectpage", {
-    projects: projectssaved,
+    projects: formattedProjects,
     message: req.flash("error"),
+    success: req.flash("success"),
   });
 }
-function details(req, res) {
+async function details(req, res) {
   const projectId = parseInt(req.params.id);
   if (!projectId) {
     req.flash("error", "No project ID provided");
     return res.redirect("/projects");
   }
-  const project = projectssaved.find((p) => p.id === projectId);
-  if (!project) {
+  const query = `
+  SELECT 
+  p.id,
+  p.project_name as projectname,
+  p.description as desc,
+  p.start_date as start,
+  p.end_date as end,
+  p.image as image,
+  COALESCE(
+    array_agg(t.name) FILTER (WHERE t.name IS NOT NULL), 
+    ARRAY[]::VARCHAR[]
+  ) as technologies
+FROM projects p
+LEFT JOIN project_technologies pt ON p.id = pt.project_id
+LEFT JOIN technologies t ON pt.technology_id = t.id
+WHERE p.id = $1
+GROUP BY p.id
+    `;
+  const result = await db.query(query, [projectId]);
+  if (result.rows.length === 0) {
     req.flash("error", "Project not found");
     return res.redirect("/projects");
   }
+  const project = result.rows[0];
   // Format dates for display
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
+
+  const formattedProjects = {
+    ...project,
+    // Format dates to YYYY-MM-DD if they're Date objects
+    start: project.start
+      ? new Date(project.start).toLocaleDateString("en-GB", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      : "",
+    end: project.end
+      ? new Date(project.end).toLocaleDateString("en-GB", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      : "",
   };
+
   // Calculate duration
   const startDate = new Date(project.start);
   const endDate = new Date(project.end);
   const durationDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
   res.render("Detailpage", {
     project: {
-      ...project,
-      formattedStartDate: formatDate(project.start),
-      formattedEndDate: formatDate(project.end),
+      ...formattedProjects,
       duration: durationDays,
     },
   });
@@ -237,7 +284,7 @@ function logout(req, res) {
   req.session.destroy();
   return res.redirect("/");
 }
-function handleProjects(req, res) {
+async function handleProjects(req, res) {
   let { projectname, start, end, desc, technologies } = req.body;
   if (!projectname || !start || !end || !desc) {
     req.flash("error", "Please fill all required fields");
@@ -265,8 +312,20 @@ function handleProjects(req, res) {
     technologies: techArray,
     image: imagefile,
   };
-  projectssaved.push(newProject);
-  console.log(projectssaved);
+  const techValues = techArray.map((tech) => `'${tech}'`).join(", ");
+  const checkTechQuery = `SELECT id,name FROM technologies WHERE name IN (${techValues})`;
+  const checkTechResult = await db.query(checkTechQuery);
+  const techMap = {};
+  checkTechResult.rows.forEach((row) => {
+    techMap[row.name] = row.id;
+  });
+  const query = `INSERT INTO public.projects("id","project_name" ,"start_date" ,"end_date","description", "image") VALUES ('${projectid}','${projectname}', '${start}', '${end}', '${desc}', '${imagefile}')`;
+  const result = await db.query(query);
+  for (const tech of techArray) {
+    const techid = techMap[tech];
+    const linkQuery = `INSERT INTO project_technologies (project_id, technology_id) VALUES (${projectid}, ${techid})`;
+    await db.query(linkQuery);
+  }
   res.redirect("/projects");
 }
 function deleteProject(req, res) {
