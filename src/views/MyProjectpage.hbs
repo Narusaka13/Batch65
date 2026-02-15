@@ -19,7 +19,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="../assets/CSS/style.css" />
+    <link rel="stylesheet" href="/assets/CSS/style.css" />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg">
@@ -123,13 +123,25 @@
     {{/if}}
     <div class="main-container col w-75 p-4">
       <div class="contact-header w-100 text-center mb-3">
-        <h1 class="fw-bolder">ADD MY PROJECT</h1>
-        <p id="input-user">Please fill out the form below to add new project</p>
+        <h1 class="fw-bolder">
+          {{#if isEditMode}}
+            EDIT MY PROJECT
+          {{else}}
+            ADD MY PROJECT
+          {{/if}}
+        </h1>
+        <p id="input-user">
+          {{#if isEditMode}}
+            Please fill out the form below to update project
+          {{else}}
+            Please fill out the form below to add new project
+          {{/if}}
+        </p>
       </div>
       <form
         class="form-field w-100 mb-3"
         id="addproject"
-        action="/projects"
+        action="{{#if isEditMode}}/projects/update/{{editProject.id}}{{else}}/projects{{/if}}"
         method="post"
         enctype="multipart/form-data"
       >
@@ -142,6 +154,7 @@
             id="ProjectName"
             name="projectname"
             placeholder="Enter project name"
+            value="{{editProject.projectname}}"
             required
           />
         </div>
@@ -154,6 +167,7 @@
               id="start-date"
               name="start"
               class="form-control"
+              value="{{editProject.start}}"
               required
             />
           </div>
@@ -164,6 +178,7 @@
               id="end-date"
               name="end"
               class="form-control"
+              value="{{editProject.end}}"
               required
             />
           </div>
@@ -178,7 +193,7 @@
             rows="5"
             placeholder="Describe your project here..."
             required
-          ></textarea>
+          >{{editProject.desc}}</textarea>
         </div>
         <!-- Technologies(Checklist) -->
         <div class="mb-3">
@@ -193,6 +208,7 @@
                   value="Node Js"
                   id="nodejscheck"
                   name="technologies"
+                  {{#if (includes editProject.technologies "Node Js")}}checked{{/if}}
                 />
                 <label class="form-check-label" for="defaultCheck1">
                   Node Js
@@ -208,6 +224,7 @@
                   value="React Js"
                   id="reactjscheck"
                   name="technologies"
+                  {{#if (includes editProject.technologies "React Js")}}checked{{/if}}
                 />
                 <label class="form-check-label" for="checkDefault">
                   React Js
@@ -223,6 +240,7 @@
                   value="Next Js"
                   id="nextjscheck"
                   name="technologies"
+                  {{#if (includes editProject.technologies "Next Js")}}checked{{/if}}
                 />
                 <label class="form-check-label" for="checkChecked">
                   Next Js
@@ -238,6 +256,7 @@
                   value="TypeScript"
                   id="typescriptcheck"
                   name="technologies"
+                  {{#if (includes editProject.technologies "TypeScript")}}checked{{/if}}
                 />
                 <label class="form-check-label" for="checkChecked">
                   TypeScript
@@ -248,7 +267,14 @@
         </div>
         <!-- Upload Image -->
         <div class="mb-3">
-          <label for="image-upload" class="form-label">Upload Image</label>
+          <label for="image-upload" class="form-label">Uploaded Image</label>
+          {{#if isEditMode}}
+          <div class="mb-2">
+          <img src="/assets/Uploads/projects/temp/{{editProject.image}}" 
+               alt="Current" style="max-width: 100px; max-height: 100px;">
+          <small class="text-muted d-block">Current image (Upload new to replace)</small>
+        </div>
+      {{/if}}
           <input
             class="form-control input-group-text"
             type="file"
@@ -260,8 +286,12 @@
         <!-- Submit Button -->
         <div class="form-submit text-center mb-3">
           <button type="submit" class="submit-btn btn btn-primary">
-            Submit
+            {{#if isEditMode}}Update Project{{else}}Submit{{/if}}
           </button>
+          <!-- Cancel button - only show in edit mode -->
+      {{#if isEditMode}}
+        <a href="/projects" class="btn btn-secondary ms-2">Cancel</a>
+      {{/if}}
         </div>
       </form>
     </div>
@@ -397,7 +427,7 @@
               class="text-decoration-none"
             >
               <img
-                src="../assets/Uploads/projects/db/{{this.image}}"
+                src="/assets/Uploads/projects/temp/{{this.image}}"
                 class="card-img-top"
                 alt="{{this.projectname}}"
                 style="height: 200px; object-fit: cover"
@@ -420,8 +450,9 @@
               </div>
             </div>
             <div class="d-flex justify-content-end gap-2">
-              <form action="/project/edit/{{this.id}}" method="POST"><button
-                  onclick="editProject(-1)"
+              <form action="/projects/edit/{{this.id}}" method="GET">
+              <button
+                  type="submit" 
                   class="btn btn-warning btn-sm"
                 >
                   Edit
@@ -453,6 +484,6 @@
       crossorigin="anonymous"
     ></script>
     {{! <script src="../assets/JS/index.js"></script> }}
-    <script src="../assets/JS/navigation.js"></script>
+    <script src="/assets/JS/navigation.js"></script>
   </body>
 </html>
