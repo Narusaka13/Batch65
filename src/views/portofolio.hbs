@@ -1,0 +1,163 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal Portfolio</title>
+    <!-- Bootstrap 5 CSS (light/dark aware) -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons (for theme toggle & hamburger) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="../assets/CSS/style_porto.css" />
+  </head>
+  <body>
+    <!-- fixed navbar, semi‑transparent, toggle on right, theme toggle button -->
+    <nav class="navbar navbar-expand-md navbar-custom fixed-top py-2">
+      <div class="container-fluid px-4">
+        <!-- left side: brand SE (you can also put logo) -->
+        <a class="navbar-brand fw-bold" href="#">
+          <div
+            class="position-relative, rounded"
+            style="width: 50px; height: 40px; overflow: hidden;"
+          >
+            <!-- If logo image exists, show it -->
+            <img
+              src="../assets/Uploads/Pic/6.png"
+              alt="Logo"
+              class="logo-image"
+            />
+          </div>
+        </a>
+
+        <!-- This group will contain theme toggle and 'Let's Talk / Download CV' on desktop, 
+           on mobile toggle remains far right -->
+        <div class="d-flex ms-auto order-md-3 align-items-center">
+          <!-- Dark/light mode toggle button (sun/moon) -->
+          <button class="btn theme-toggle me-2" id="themeToggleBtn">
+            <i class="bi bi-sun-fill"></i>
+          </button>
+
+          <!-- 'Let's Talk' & 'Download CV' (visible on desktop, on mobile inside collapse) -->
+          <div class="d-none d-md-flex align-items-center">
+            <a href="#" class="btn btn-outline-turquoise me-2"><i
+                class="bi bi-chat-dots me-1"
+              ></i>Let's Talk</a>
+            <a href="#" class="btn btn-outline-turquoise"><i
+                class="bi bi-download me-1"
+              ></i>Download CV</a>
+          </div>
+        </div>
+
+        <!-- navbar toggler (hamburger) – must be after the group above to stay most right -->
+        <button
+          class="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarMain"
+          aria-controls="navbarMain"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- collapse + mobile menu items (Tech Stack, Experience, Projects) -->
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <!-- main menu – centered on desktop, stacked on mobile -->
+          <ul class="navbar-nav mx-auto mb-2 mb-md-0 text-center">
+            <li class="nav-item"><a class="nav-link" href="#"><i
+                  class="bi bi-stack me-1"
+                ></i>Tech&nbsp;Stack</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i
+                  class="bi bi-briefcase me-1"
+                ></i>Experience</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i
+                  class="bi bi-kanban me-1"
+                ></i>Projects</a></li>
+          </ul>
+          <!-- mobile-only action buttons (Let's Talk + Download CV) visible inside collapse -->
+          <div class="d-md-none text-center mt-3 pb-2">
+            <a href="#" class="btn btn-outline-turquoise me-2"><i
+                class="bi bi-chat-dots"
+              ></i>
+              Let's Talk</a>
+            <a href="#" class="btn btn-outline-turquoise"><i
+                class="bi bi-download"
+              ></i>
+              Download CV</a>
+          </div>
+        </div>
+      </div>
+      <!-- /container-fluid -->
+    </nav>
+
+    <!-- dummy page content to demonstrate scroll, fixed behavior & color palette -->
+    <main class="container" style="max-width: 1000px;">
+      <div class="demo-content my-5 shadow-sm">
+        <h2 class="mb-4"><i
+            class="bi bi-palette me-2"
+            style="color: #40e0d0;"
+          ></i>
+          turquoise & light‑green palette</h2>
+        <p>✨ Fixed navbar • semi‑transparent body • toggle always on right in
+          mobile • dark/light switch works</p>
+        <p>⬇️ scroll down – navbar stays on top. Try resize to mobile width; the
+          hamburger icon stays on the far right. Theme toggle button is placed
+          right before hamburger (visible even on mobile). On narrow screens,
+          'Let's Talk' & 'Download CV' move inside the collapsible menu.</p>
+        <div class="row mt-4">
+          <div class="col-6 col-md-3 mb-3"><span
+              class="badge bg-turquoise p-3 w-100"
+              style="background:#40e0d0; color:#01443d;"
+            >turquoise #40E0D0</span></div>
+          <div class="col-6 col-md-3 mb-3"><span
+              class="badge p-3 w-100"
+              style="background:#90ee90; color:#01443d;"
+            >light-green #90EE90</span></div>
+          <div class="col-6 col-md-3 mb-3"><span
+              class="badge p-3 w-100"
+              style="background:#2e8b57; color:white;"
+            >sea-green #2E8B57</span></div>
+          <div class="col-6 col-md-3 mb-3"><span
+              class="badge p-3 w-100"
+              style="background:#66cdaa; color:#01443d;"
+            >medium aquamarine</span></div>
+        </div>
+        <p class="mt-4">👉 scroll down and notice the fixed navbar,
+          semi‑transparent with blur. Click the
+          <i class="bi bi-sun"></i>
+          /
+          <i class="bi bi-moon-stars"></i>
+          button to toggle dark mode (light/dark derived from
+          turquoise/light-green).</p>
+      </div>
+      <!-- extra lines for scroll -->
+      <div style="height: 700px;">
+        <div
+          class="card border-0 shadow p-4"
+          style="background: rgba(144,238,144,0.1);"
+        >
+          <h5>More content → shows fixed navbar</h5>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Pellentesque habitant morbi tristique senectus et netus et malesuada
+            fames ac turpis egestas. Donec tincidunt lectus eu fringilla
+            faucibus. Nullam vitae nisi eu purus feugiat sodales. Praesent non
+            ipsum eget leo ullamcorper interdum.</p>
+          <p><i class="bi bi-droplet me-1" style="color:#40e0d0;"></i>
+            Turquoise transparency remains.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bootstrap JS for collapse and toggles -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    ></script>
+    <script src="../assets/JS/portofolio.js"></script>
+  </body>
+</html>

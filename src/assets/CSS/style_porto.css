@@ -1,0 +1,186 @@
+/* custom navbar background: semi‑transparent with turquoise/light‑green
+    roots */
+.navbar.navbar-custom {
+  background-color: rgba(
+    64,
+    224,
+    208,
+    0.15
+  ) !important; /* turquoise with transparency */
+  backdrop-filter: blur(8px) saturate(160%);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+  border-bottom: 1px solid rgba(144, 238, 144, 0.4); /*
+    light-green border */
+  box-shadow: 0 6px 20px -8px rgba(0, 100, 80, 0.25);
+  transition: background-color 0.25s ease, color 0.2s;
+} /* brand & links
+    inherit turquoise/light-green vibe */
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link,
+.navbar-custom .btn {
+  color: #02665c !important;
+  /* deep turquoise for contrast */
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.navbar-custom .nav-link:hover {
+  color: #2e8b57 !important; /* sea
+    green / light-green influence */
+} /* theme toggle button (sun/moon) –
+    turquoise outline */
+.navbar-custom .theme-toggle {
+  border: 1px solid #40e0d0;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
+  color: #015f56;
+  border-radius: 30px;
+  padding: 0.3rem 1rem;
+  margin-left: 0.5rem;
+}
+.navbar-custom .theme-toggle:hover {
+  background-color: #d0f0e8;
+  border-color: #66cdaa;
+} /* download CV & Let's
+    Talk (accent buttons) */
+.navbar-custom .btn-outline-turquoise {
+  border: 1px solid #40e0d0;
+  background-color: rgba(144, 238, 144, 0.2);
+  color: #015f56;
+  border-radius: 30px;
+  padding: 0.3rem 1.2rem;
+  margin-left: 0.5rem;
+}
+.navbar-custom .btn-outline-turquoise:hover {
+  background-color: #afeee0;
+  border-color: #2e8b57;
+  color: #01443d;
+} /* fixed navbar adjustment */
+body {
+  padding-top: 76px; /* prevent content hiding behind fixed navbar */
+} /* extra turquoise/light-green touches for dark mode */
+.dark-mode .navbar-custom .navbar-brand,
+.dark-mode .navbar-custom .nav-link,
+.dark-mode .navbar-custom .btn {
+  color: #e0f2e9 !important; /* light mint
+    */
+}
+.dark-mode .navbar-custom {
+  background-color: rgba(
+    10,
+    50,
+    45,
+    0.4
+  ) !important; /* deep translucent turquoise */
+  border-bottom: 1px solid #66cdaa;
+}
+.dark-mode .navbar-custom .theme-toggle {
+  background-color: #1f3a36;
+  border-color: #66cdaa;
+  color: #c0f0e8;
+}
+.dark-mode .navbar-custom .btn-outline-turquoise {
+  border-color: #66cdaa;
+  background-color: rgba(30, 70, 60, 0.4);
+  color: #c0f0e8;
+}
+.dark-mode .navbar-custom .btn-outline-turquoise:hover {
+  background-color: #236b5e;
+  color: white;
+} /* ensure hamburger (toggler) is always on the right */
+.navbar-custom .navbar-toggler {
+  border-color: #40e0d0;
+  order: 3; /* flex
+    order within container */
+  margin-left: auto; /* push to the right
+    (redundant but safe) */
+}
+.navbar-custom .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(2, 102, 92, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+/* mobile
+    adjustments: keep toggle far right, even with many items */
+@media (max-width: 767.98px) {
+  .navbar-custom .container-fluid {
+    flex-wrap: wrap;
+  }
+  .navbar-custom .navbar-collapse {
+    order: 4;
+    flex-basis: 100%;
+  }
+  /*
+    ensure left side: brand, right side: toggle + theme button + extra? but
+    toggle must be most right */
+  .navbar-custom .navbar-brand {
+    margin-right: auto;
+  } /* theme toggle button placed before toggler? we want toggle most
+    right, so theme toggle can stay left of toggler inside a wrapper.
+    structure: brand | (theme button + download) group | toggler (last) */
+  .navbar-custom .ms-auto.order-md-3 {
+    margin-left: auto !important;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  } /* inside that
+    group, theme toggle comes first, then Let's Talk / Download CV (hidden on
+    narrow, but inside dropdown) */
+  .navbar-custom .navbar-nav.ms-auto {
+    margin-left: 0;
+  }
+}
+.navbar-brand {
+  position: relative;
+  width: 50px; /* Fixed width */
+  height: 40px; /* Fixed height */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  margin-right: 1rem;
+  background-color: transparent;
+}
+.navbar-brand .logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Covers the area, may crop */
+  object-position: center; /* Default center - adjustable */
+}
+/* small demo content */
+.demo-content {
+  background: linear-gradient(145deg, #f0faf5, #f5fffa);
+  padding: 2rem;
+  border-radius: 2rem;
+  color: #015f56;
+  font-size: 1.2rem;
+}
+.dark-mode .demo-content {
+  background: #1d3b35;
+  color: #ccf1e6;
+}
+/* extra insurance: hamburger always far right */
+.navbar-custom .navbar-toggler {
+  margin-left: 0.5rem; /* tiny gap from theme button */
+}
+/* dark/light turquoise polish */
+.bg-turquoise {
+  background-color: #40e0d0 !important;
+}
+.dark-mode .bg-turquoise {
+  background-color: #1f6f65 !important;
+  color: white;
+} /* override link color in dark for nav */
+.dark-mode .navbar-custom .navbar-nav .nav-link {
+  color: #bef5e7 !important;
+}
+.dark-mode .navbar-custom .navbar-nav .nav-link:hover {
+  color: #f0fff0 !important;
+} /* small screen theme toggle text hidden but
+    icon fine */
+@media (max-width: 380px) {
+  .navbar-custom .theme-toggle span {
+    display: none;
+  }
+} /* mobile collapse buttons align */
+.navbar-custom .btn-outline-turquoise {
+  white-space: nowrap;
+}
