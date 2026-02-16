@@ -1,5 +1,28 @@
-/* custom navbar background: semi‑transparent with turquoise/light‑green
-    roots */
+/* ========== GLOBAL / COMMON CONFIGURATION ========== */
+/* Used across multiple sections - base styles, variables, and utility classes */
+
+body {
+  padding-top: 76px; /* prevent content hiding behind fixed navbar */
+}
+
+/* Dark mode utility (applied to body) */
+.dark-mode {
+  /* Base dark mode variables can go here */
+}
+
+/* Turquoise utility classes - used in navbar, badges, carousel */
+.bg-turquoise {
+  background-color: #40e0d0 !important;
+}
+.dark-mode .bg-turquoise {
+  background-color: #1f6f65 !important;
+  color: white;
+}
+
+/* ========== NAVBAR SECTION ========== */
+/* All navbar-related styles - includes navbar-custom, toggler, theme button, nav links */
+
+/* Main navbar container */
 .navbar.navbar-custom {
   background-color: rgba(
     64,
@@ -9,25 +32,25 @@
   ) !important; /* turquoise with transparency */
   backdrop-filter: blur(8px) saturate(160%);
   -webkit-backdrop-filter: blur(8px) saturate(160%);
-  border-bottom: 1px solid rgba(144, 238, 144, 0.4); /*
-    light-green border */
+  border-bottom: 1px solid rgba(144, 238, 144, 0.4); /* light-green border */
   box-shadow: 0 6px 20px -8px rgba(0, 100, 80, 0.25);
   transition: background-color 0.25s ease, color 0.2s;
-} /* brand & links
-    inherit turquoise/light-green vibe */
+}
+
+/* Navbar text elements - brand, links, buttons */
 .navbar-custom .navbar-brand,
 .navbar-custom .nav-link,
 .navbar-custom .btn {
-  color: #02665c !important;
-  /* deep turquoise for contrast */
+  color: #02665c !important; /* deep turquoise for contrast */
   font-weight: 500;
   transition: color 0.2s;
 }
+
 .navbar-custom .nav-link:hover {
-  color: #2e8b57 !important; /* sea
-    green / light-green influence */
-} /* theme toggle button (sun/moon) –
-    turquoise outline */
+  color: #2e8b57 !important; /* sea green / light-green influence */
+}
+
+/* Theme toggle button (sun/moon) */
 .navbar-custom .theme-toggle {
   border: 1px solid #40e0d0;
   background-color: rgba(255, 255, 255, 0.3);
@@ -37,11 +60,13 @@
   padding: 0.3rem 1rem;
   margin-left: 0.5rem;
 }
+
 .navbar-custom .theme-toggle:hover {
   background-color: #d0f0e8;
   border-color: #66cdaa;
-} /* download CV & Let's
-    Talk (accent buttons) */
+}
+
+/* Download CV & Let's Talk buttons */
 .navbar-custom .btn-outline-turquoise {
   border: 1px solid #40e0d0;
   background-color: rgba(144, 238, 144, 0.2);
@@ -49,84 +74,16 @@
   border-radius: 30px;
   padding: 0.3rem 1.2rem;
   margin-left: 0.5rem;
+  white-space: nowrap; /* mobile collapse buttons align */
 }
+
 .navbar-custom .btn-outline-turquoise:hover {
   background-color: #afeee0;
   border-color: #2e8b57;
   color: #01443d;
-} /* fixed navbar adjustment */
-body {
-  padding-top: 76px; /* prevent content hiding behind fixed navbar */
-} /* extra turquoise/light-green touches for dark mode */
-.dark-mode .navbar-custom .navbar-brand,
-.dark-mode .navbar-custom .nav-link,
-.dark-mode .navbar-custom .btn {
-  color: #e0f2e9 !important; /* light mint
-    */
 }
-.dark-mode .navbar-custom {
-  background-color: rgba(
-    10,
-    50,
-    45,
-    0.4
-  ) !important; /* deep translucent turquoise */
-  border-bottom: 1px solid #66cdaa;
-}
-.dark-mode .navbar-custom .theme-toggle {
-  background-color: #1f3a36;
-  border-color: #66cdaa;
-  color: #c0f0e8;
-}
-.dark-mode .navbar-custom .btn-outline-turquoise {
-  border-color: #66cdaa;
-  background-color: rgba(30, 70, 60, 0.4);
-  color: #c0f0e8;
-}
-.dark-mode .navbar-custom .btn-outline-turquoise:hover {
-  background-color: #236b5e;
-  color: white;
-} /* ensure hamburger (toggler) is always on the right */
-.navbar-custom .navbar-toggler {
-  border-color: #40e0d0;
-  order: 3; /* flex
-    order within container */
-  margin-left: auto; /* push to the right
-    (redundant but safe) */
-}
-.navbar-custom .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(2, 102, 92, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-}
-/* mobile
-    adjustments: keep toggle far right, even with many items */
-@media (max-width: 767.98px) {
-  .navbar-custom .container-fluid {
-    flex-wrap: wrap;
-  }
-  .navbar-custom .navbar-collapse {
-    order: 4;
-    flex-basis: 100%;
-  }
-  /*
-    ensure left side: brand, right side: toggle + theme button + extra? but
-    toggle must be most right */
-  .navbar-custom .navbar-brand {
-    margin-right: auto;
-  } /* theme toggle button placed before toggler? we want toggle most
-    right, so theme toggle can stay left of toggler inside a wrapper.
-    structure: brand | (theme button + download) group | toggler (last) */
-  .navbar-custom .ms-auto.order-md-3 {
-    margin-left: auto !important;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-  } /* inside that
-    group, theme toggle comes first, then Let's Talk / Download CV (hidden on
-    narrow, but inside dropdown) */
-  .navbar-custom .navbar-nav.ms-auto {
-    margin-left: 0;
-  }
-}
+
+/* Navbar brand/logo container */
 .navbar-brand {
   position: relative;
   width: 50px; /* Fixed width */
@@ -139,13 +96,166 @@ body {
   margin-right: 1rem;
   background-color: transparent;
 }
+
 .navbar-brand .logo-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Covers the area, may crop */
-  object-position: center; /* Default center - adjustable */
+  object-fit: cover;
+  object-position: center;
 }
-/* small demo content */
+
+/* Hamburger menu toggler */
+.navbar-custom .navbar-toggler {
+  border-color: #40e0d0;
+  order: 3; /* flex order within container */
+  margin-left: auto; /* push to the right */
+  margin-left: 0.5rem; /* tiny gap from theme button */
+}
+
+.navbar-custom .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(2, 102, 92, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* ========== NAVBAR DARK MODE OVERRIDES ========== */
+/* All navbar-specific dark mode styles */
+
+.dark-mode .navbar-custom .navbar-brand,
+.dark-mode .navbar-custom .nav-link,
+.dark-mode .navbar-custom .btn {
+  color: #e0f2e9 !important; /* light mint */
+}
+
+.dark-mode .navbar-custom {
+  background-color: rgba(
+    10,
+    50,
+    45,
+    0.4
+  ) !important; /* deep translucent turquoise */
+  border-bottom: 1px solid #66cdaa;
+}
+
+.dark-mode .navbar-custom .theme-toggle {
+  background-color: #1f3a36;
+  border-color: #66cdaa;
+  color: #c0f0e8;
+}
+
+.dark-mode .navbar-custom .btn-outline-turquoise {
+  border-color: #66cdaa;
+  background-color: rgba(30, 70, 60, 0.4);
+  color: #c0f0e8;
+}
+
+.dark-mode .navbar-custom .btn-outline-turquoise:hover {
+  background-color: #236b5e;
+  color: white;
+}
+
+.dark-mode .navbar-custom .navbar-nav .nav-link {
+  color: #bef5e7 !important;
+}
+
+.dark-mode .navbar-custom .navbar-nav .nav-link:hover {
+  color: #f0fff0 !important;
+}
+
+/* ========== NAVBAR MOBILE RESPONSIVE ========== */
+/* Mobile-specific navbar adjustments (max-width: 767.98px) */
+
+@media (max-width: 767.98px) {
+  .navbar-custom .container-fluid {
+    flex-wrap: wrap;
+  }
+
+  .navbar-custom .navbar-collapse {
+    order: 4;
+    flex-basis: 100%;
+  }
+
+  .navbar-custom .navbar-brand {
+    margin-right: auto;
+  }
+
+  /* Theme button and desktop buttons wrapper */
+  .navbar-custom .ms-auto.order-md-3 {
+    margin-left: auto !important;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .navbar-custom .navbar-nav.ms-auto {
+    margin-left: 0;
+  }
+}
+
+/* Ultra-small screens (max-width: 380px) - hide theme toggle text, keep icon */
+@media (max-width: 380px) {
+  .navbar-custom .theme-toggle span {
+    display: none;
+  }
+}
+
+/* ========== MAIN INTERFACE SECTION ========== */
+/* Profile picture, location badge, demo content, and main page elements */
+
+/* Profile picture wrapper - fixed size with hover effects */
+.profile-pic-wrapper {
+  width: 280px; /* fixed size */
+  height: 280px;
+  margin: 0 auto; /* centering inside column */
+  position: relative;
+  overflow: hidden;
+  border-radius: 30% 70% 70% 30% / 30% 40% 60% 70%; /* organic shape */
+  box-shadow: 0 20px 30px -10px rgba(0, 130, 120, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: default; /* pointer does NOT change (not a link) */
+}
+
+.profile-pic-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%; /* slight adjustment for face area */
+  display: block;
+  transition: transform 0.5s ease, filter 0.4s ease;
+}
+
+/* Hover effects for profile picture */
+.profile-pic-wrapper:hover {
+  border-radius: 60% 40% 40% 60% / 60% 50% 50% 40%;
+  box-shadow: 0 28px 38px -8px #1d6b5e;
+}
+
+.profile-pic-wrapper:hover img {
+  transform: scale(1.06) rotate(1deg);
+  filter: brightness(1.02) contrast(1.02);
+}
+
+/* Dark mode for profile picture */
+.dark-mode .profile-pic-wrapper {
+  box-shadow: 0 20px 30px -5px #103b35;
+}
+
+/* Location & availability badge */
+.location-badge {
+  background: rgba(64, 224, 208, 0.2);
+  border-left: 4px solid #40e0d0;
+  padding: 0.5rem 1rem;
+  border-radius: 40px;
+  display: inline-flex;
+  align-items: center;
+  backdrop-filter: blur(4px);
+}
+
+.dark-mode .location-badge {
+  background: rgba(20, 70, 60, 0.6);
+  border-left-color: #66cdaa;
+  color: #defff0;
+}
+
+/* Demo content boxes (used in main interface) */
 .demo-content {
   background: linear-gradient(145deg, #f0faf5, #f5fffa);
   padding: 2rem;
@@ -153,34 +263,759 @@ body {
   color: #015f56;
   font-size: 1.2rem;
 }
+
 .dark-mode .demo-content {
   background: #1d3b35;
   color: #ccf1e6;
 }
-/* extra insurance: hamburger always far right */
-.navbar-custom .navbar-toggler {
-  margin-left: 0.5rem; /* tiny gap from theme button */
-}
-/* dark/light turquoise polish */
-.bg-turquoise {
-  background-color: #40e0d0 !important;
-}
-.dark-mode .bg-turquoise {
-  background-color: #1f6f65 !important;
-  color: white;
-} /* override link color in dark for nav */
-.dark-mode .navbar-custom .navbar-nav .nav-link {
-  color: #bef5e7 !important;
-}
-.dark-mode .navbar-custom .navbar-nav .nav-link:hover {
-  color: #f0fff0 !important;
-} /* small screen theme toggle text hidden but
-    icon fine */
-@media (max-width: 380px) {
-  .navbar-custom .theme-toggle span {
-    display: none;
+
+/* ========== MAIN INTERFACE RESPONSIVE ========== */
+/* Mobile adjustments for profile row (below lg breakpoint) */
+
+@media (max-width: 991.98px) {
+  .profile-pic-wrapper {
+    width: 240px;
+    height: 240px;
+    margin-bottom: 2rem; /* space before text */
   }
-} /* mobile collapse buttons align */
-.navbar-custom .btn-outline-turquoise {
+
+  /* Profile row flex column layout for mobile */
+  .row.profile-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .row.profile-row .order-lg-1 {
+    order: 1 !important; /* picture column comes first */
+  }
+
+  .row.profile-row .order-lg-2 {
+    order: 2 !important; /* text column after pic */
+  }
+}
+
+/* ========== TECH STACK CAROUSEL SECTION ========== */
+/* Infinite scrolling carousel for technology display */
+
+.carousel {
+  margin: 100px auto;
+  width: 90%;
+  overflow: hidden;
+  display: flex;
+  position: relative;
+  border-radius: 1rem;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none; /* Hide scrollbar but keep functionality */
+}
+
+/* Carousel group - contains the tech cards */
+.group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  flex-shrink: 0;
+  animation: scroll 20s linear infinite; /* Infinite scroll animation */
+  padding: 0.5em 0;
+}
+
+/* Gap between the two groups for seamless transition */
+.group:first-child {
+  margin-right: 1em;
+}
+
+/* Individual technology cards */
+.tech {
+  display: flex;
+  flex: 0 0 5em;
+  height: 5em;
+  padding: 0; /* Reset padding, using aspect-ratio instead */
+  background: turquoise;
+  font-size: 3em;
+  border-radius: 0.5em;
+  align-items: center;
+  justify-content: center;
+  color: #015f56;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  aspect-ratio: 1/1; /* Ensures perfect square cards */
+}
+
+/* Carousel animation keyframes */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Move exactly one group width plus the margin gap */
+    transform: translateX(calc(-100% - 1em));
+  }
+}
+
+/* Dark mode for carousel */
+.dark-mode .tech {
+  background: #1f6f65;
+  color: #e0f2e9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Pause animation on hover for better UX */
+.carousel:hover .group {
+  animation-play-state: paused;
+}
+/* ========== WORK EXPERIENCE SECTION ========== */
+/* All custom styling moved to CSS classes - Bootstrap classes used where available */
+
+/* Section title */
+.work-section-title {
+  color: #02665c !important;
+  border-bottom-color: rgba(64, 224, 208, 0.3) !important;
+}
+
+.dark-mode .work-section-title {
+  color: #e0f2e9 !important;
+}
+
+/* Experience card */
+.experience-card {
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 130, 120, 0.15) !important;
+  transition: all 0.3s ease;
+}
+
+.experience-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 35px -12px rgba(0, 130, 120, 0.25) !important;
+}
+
+.dark-mode .experience-card {
+  background: rgba(20, 50, 45, 0.7) !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark-mode .experience-card:hover {
+  box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Experience role title */
+.experience-role {
+  color: #015f56 !important;
+}
+
+.dark-mode .experience-role {
+  color: #c0f0e8 !important;
+}
+
+/* Experience date badge */
+.experience-date {
+  background: rgba(64, 224, 208, 0.1) !important;
+  color: #2e8b57 !important;
+  border: 1px solid rgba(64, 224, 208, 0.3) !important;
+  border-radius: 30px !important;
+  font-weight: 500 !important;
+}
+
+.dark-mode .experience-date {
+  background: rgba(30, 70, 60, 0.5) !important;
+  color: #66cdaa !important;
+  border-color: rgba(102, 205, 170, 0.4) !important;
+}
+
+/* Experience company name */
+.experience-company {
+  color: #2e8b57 !important;
+  border-bottom-color: rgba(64, 224, 208, 0.3) !important;
+}
+
+.dark-mode .experience-company {
+  color: #9fdfc0 !important;
+}
+
+/* Experience list */
+.experience-list {
+  padding-left: 0;
+}
+
+.experience-list-item {
+  line-height: 1.5;
+}
+
+/* Experience bullet point */
+.experience-bullet {
+  color: #40e0d0 !important;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  display: inline-block;
+}
+
+.dark-mode .experience-bullet {
+  color: #66cdaa !important;
+}
+
+/* Experience text */
+.experience-text {
+  color: #015f56 !important;
+}
+
+.dark-mode .experience-text {
+  color: #defff0 !important;
+}
+
+/* Tech tags container */
+.tech-tags {
+  margin-top: 0.5rem;
+}
+
+/* Individual tech tag */
+.tech-tag {
+  background: rgba(64, 224, 208, 0.1) !important;
+  color: #015f56 !important;
+  border: 1px solid rgba(64, 224, 208, 0.3) !important;
+  border-radius: 30px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease;
   white-space: nowrap;
+}
+
+.tech-tag:hover {
+  background: rgba(64, 224, 208, 0.25) !important;
+  border-color: #40e0d0 !important;
+  transform: translateY(-1px);
+}
+
+.dark-mode .tech-tag {
+  background: rgba(30, 70, 60, 0.5) !important;
+  color: #e0f2e9 !important;
+  border-color: rgba(102, 205, 170, 0.4) !important;
+}
+
+.dark-mode .tech-tag:hover {
+  background: rgba(50, 100, 85, 0.7) !important;
+  border-color: #66cdaa !important;
+}
+
+/* ========== WORK EXPERIENCE RESPONSIVE ========== */
+/* Minimal responsive adjustments */
+
+@media (max-width: 768px) {
+  .experience-card .card-body {
+    padding: 1.5rem !important; /* Slightly smaller padding on tablets */
+  }
+}
+
+@media (max-width: 576px) {
+  .experience-card .card-body {
+    padding: 1.25rem !important; /* Even smaller padding on mobile */
+  }
+
+  .tech-tag {
+    font-size: 0.8rem !important; /* Smaller tech tags on mobile */
+    padding: 0.25rem 0.75rem !important;
+  }
+
+  .experience-role {
+    font-size: 1.2rem !important; /* Smaller role title on mobile */
+  }
+
+  .experience-date {
+    font-size: 0.85rem !important; /* Smaller date badge on mobile */
+  }
+
+  .experience-list-item {
+    font-size: 0.95rem !important; /* Slightly smaller list text on mobile */
+  }
+}
+
+/* For very small screens */
+@media (max-width: 380px) {
+  .tech-tag {
+    font-size: 0.75rem !important;
+    padding: 0.2rem 0.6rem !important;
+  }
+}
+/* ========== PROJECTS SECTION ========== */
+/* My Projects section - cards, tech tags, and action buttons */
+
+/* Section title */
+.projects-section-title {
+  color: #02665c !important;
+  border-bottom-color: rgba(64, 224, 208, 0.3) !important;
+}
+
+.dark-mode .projects-section-title {
+  color: #e0f2e9 !important;
+}
+
+/* Project card */
+.project-card {
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 130, 120, 0.15) !important;
+  transition: all 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 35px -12px rgba(0, 130, 120, 0.25) !important;
+}
+
+.dark-mode .project-card {
+  background: rgba(20, 50, 45, 0.7) !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark-mode .project-card:hover {
+  box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Project title */
+.project-title {
+  color: #015f56 !important;
+  position: relative;
+  display: inline-block;
+}
+
+.project-title::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: #40e0d0;
+  border-radius: 2px;
+}
+
+.dark-mode .project-title {
+  color: #c0f0e8 !important;
+}
+
+.dark-mode .project-title::after {
+  background: #66cdaa;
+}
+
+/* Project description */
+.project-description {
+  color: #015f56 !important;
+  line-height: 1.6;
+  min-height: 80px; /* Ensures consistent height across cards */
+}
+
+.dark-mode .project-description {
+  color: #defff0 !important;
+}
+
+/* Project tech tags container */
+.project-tech-tags {
+  margin-top: 0.5rem;
+}
+
+/* Individual tech tag - reusing similar style from experience section */
+.project-tech-tag {
+  background: rgba(64, 224, 208, 0.1) !important;
+  color: #015f56 !important;
+  border: 1px solid rgba(64, 224, 208, 0.3) !important;
+  border-radius: 30px !important;
+  font-weight: 500 !important;
+  font-size: 0.85rem !important;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.project-tech-tag:hover {
+  background: rgba(64, 224, 208, 0.25) !important;
+  border-color: #40e0d0 !important;
+  transform: translateY(-1px);
+}
+
+.dark-mode .project-tech-tag {
+  background: rgba(30, 70, 60, 0.5) !important;
+  color: #e0f2e9 !important;
+  border-color: rgba(102, 205, 170, 0.4) !important;
+}
+
+.dark-mode .project-tech-tag:hover {
+  background: rgba(50, 100, 85, 0.7) !important;
+  border-color: #66cdaa !important;
+}
+
+/* Project action buttons */
+.project-btn {
+  padding: 0.5rem 1.25rem;
+  border-radius: 30px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+/* Private repository button */
+.private-btn {
+  background: rgba(64, 224, 208, 0.1);
+  color: #015f56;
+  border-color: rgba(64, 224, 208, 0.3);
+}
+
+.private-btn:hover {
+  background: rgba(64, 224, 208, 0.25);
+  border-color: #40e0d0;
+  color: #015f56;
+  transform: translateY(-2px);
+}
+
+.dark-mode .private-btn {
+  background: rgba(30, 70, 60, 0.5);
+  color: #e0f2e9;
+  border-color: rgba(102, 205, 170, 0.4);
+}
+
+.dark-mode .private-btn:hover {
+  background: rgba(50, 100, 85, 0.7);
+  border-color: #66cdaa;
+  color: #e0f2e9;
+}
+
+/* Live demo button */
+.demo-btn {
+  background: #40e0d0;
+  color: #015f56;
+  border-color: #40e0d0;
+}
+
+.demo-btn:hover {
+  background: #2e8b57;
+  border-color: #2e8b57;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.dark-mode .demo-btn {
+  background: #1f6f65;
+  color: #e0f2e9;
+  border-color: #66cdaa;
+}
+
+.dark-mode .demo-btn:hover {
+  background: #236b5e;
+  border-color: #66cdaa;
+  color: white;
+}
+
+/* Button icons */
+.project-btn i {
+  font-size: 1rem;
+}
+
+/* ========== PROJECTS SECTION RESPONSIVE ========== */
+/* Minimal responsive adjustments - mostly handled by Bootstrap grid */
+
+@media (max-width: 768px) {
+  .project-card .card-body {
+    padding: 1.5rem !important;
+  }
+
+  .project-description {
+    min-height: auto; /* Remove min-height on mobile */
+    font-size: 0.95rem;
+  }
+
+  .project-title {
+    font-size: 1.5rem !important;
+  }
+
+  .project-title::after {
+    width: 30px;
+    height: 2px;
+    bottom: -6px;
+  }
+}
+
+@media (max-width: 576px) {
+  .project-card .card-body {
+    padding: 1.25rem !important;
+  }
+
+  .project-tech-tag {
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0.75rem !important;
+  }
+
+  .project-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .project-actions {
+    gap: 0.75rem !important;
+  }
+}
+
+/* For very small screens - stack buttons */
+@media (max-width: 380px) {
+  .project-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .project-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center !important;
+  }
+}
+/* ========== CLOSING SECTION ========== */
+/* Closing call-to-action section with contact information */
+
+/* Closing card - matches theme with other cards */
+.closing-card {
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border-radius: 2rem !important;
+  box-shadow: 0 15px 35px -15px rgba(0, 130, 120, 0.2) !important;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(64, 224, 208, 0.2) !important;
+}
+
+.closing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 40px -18px rgba(0, 130, 120, 0.3) !important;
+  border-color: rgba(64, 224, 208, 0.4) !important;
+}
+
+.dark-mode .closing-card {
+  background: rgba(20, 50, 45, 0.7) !important;
+  border-color: rgba(102, 205, 170, 0.2) !important;
+  box-shadow: 0 15px 35px -15px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark-mode .closing-card:hover {
+  border-color: rgba(102, 205, 170, 0.4) !important;
+  box-shadow: 0 25px 40px -18px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Closing title */
+.closing-title {
+  color: #02665c !important;
+  font-weight: 600 !important;
+}
+
+.dark-mode .closing-title {
+  color: #e0f2e9 !important;
+}
+
+/* Closing subtitle */
+.closing-subtitle {
+  color: #015f56 !important;
+  line-height: 1.6;
+}
+
+.dark-mode .closing-subtitle {
+  color: #defff0 !important;
+}
+
+/* Contact links container */
+.closing-contact {
+  flex-wrap: wrap;
+}
+
+/* Individual contact link */
+.closing-contact-link {
+  text-decoration: none;
+  color: inherit;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  background: rgba(64, 224, 208, 0.08);
+  border: 1px solid rgba(64, 224, 208, 0.2);
+  transition: all 0.25s ease;
+}
+
+.closing-contact-link:hover {
+  background: rgba(64, 224, 208, 0.15);
+  border-color: #40e0d0;
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.dark-mode .closing-contact-link {
+  background: rgba(30, 70, 60, 0.4);
+  border-color: rgba(102, 205, 170, 0.3);
+}
+
+.dark-mode .closing-contact-link:hover {
+  background: rgba(50, 100, 85, 0.6);
+  border-color: #66cdaa;
+}
+
+/* Contact icon */
+.closing-contact-icon {
+  color: #40e0d0;
+  display: flex;
+  align-items: center;
+  transition: color 0.25s ease;
+}
+
+.closing-contact-link:hover .closing-contact-icon {
+  color: #2e8b57;
+}
+
+.dark-mode .closing-contact-icon {
+  color: #66cdaa;
+}
+
+.dark-mode .closing-contact-link:hover .closing-contact-icon {
+  color: #9fdfc0;
+}
+
+/* Contact text */
+.closing-contact-text {
+  color: #015f56;
+  font-weight: 500;
+  transition: color 0.25s ease;
+}
+
+.closing-contact-link:hover .closing-contact-text {
+  color: #2e8b57;
+}
+
+.dark-mode .closing-contact-text {
+  color: #e0f2e9;
+}
+
+.dark-mode .closing-contact-link:hover .closing-contact-text {
+  color: #ffffff;
+}
+
+/* ========== FOOTER SECTION ========== */
+/* Footer with copyright and heart icon */
+
+.footer-section {
+  background: rgba(64, 224, 208, 0.08);
+  border-top: 1px solid rgba(64, 224, 208, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.dark-mode .footer-section {
+  background: rgba(20, 50, 45, 0.5);
+  border-top-color: rgba(102, 205, 170, 0.2);
+}
+
+/* Footer copyright text */
+.footer-copyright {
+  color: #015f56;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+.dark-mode .footer-copyright {
+  color: #defff0;
+}
+
+/* Heart icon animation */
+.footer-heart {
+  display: inline-block;
+  color: #ff4d4d; /* Red heart color */
+  animation: heartBeat 1.5s ease infinite;
+  margin: 0 2px;
+}
+
+.dark-mode .footer-heart {
+  color: #ff6b6b;
+}
+
+@keyframes heartBeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.05);
+  }
+}
+
+/* ========== CLOSING & FOOTER RESPONSIVE ========== */
+/* Minimal responsive adjustments */
+
+@media (max-width: 768px) {
+  .closing-card .card-body {
+    padding: 2rem !important;
+  }
+
+  .closing-title {
+    font-size: 2rem !important;
+  }
+
+  .closing-subtitle {
+    font-size: 1.1rem !important;
+  }
+
+  .closing-contact {
+    gap: 1rem !important;
+  }
+
+  .closing-contact-link {
+    width: 100%;
+    max-width: 350px;
+    justify-content: center;
+  }
+
+  .footer-section {
+    padding: 1.25rem 0 !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .closing-card .card-body {
+    padding: 1.5rem !important;
+  }
+
+  .closing-title {
+    font-size: 1.75rem !important;
+  }
+
+  .closing-subtitle {
+    font-size: 1rem !important;
+  }
+
+  .closing-contact-link {
+    padding: 0.6rem 1.2rem;
+  }
+
+  .closing-contact-text {
+    font-size: 0.95rem !important;
+  }
+
+  .closing-contact-icon i {
+    font-size: 1.25rem !important;
+  }
+
+  .footer-copyright {
+    font-size: 0.9rem !important;
+  }
+}
+
+/* For very small screens */
+@media (max-width: 380px) {
+  .closing-contact-link {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem !important;
+  }
 }
