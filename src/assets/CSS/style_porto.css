@@ -59,6 +59,7 @@ body {
   border-radius: 30px;
   padding: 0.3rem 1rem;
   margin-left: 0.5rem;
+  height: 38px;
 }
 
 .navbar-custom .theme-toggle:hover {
@@ -75,6 +76,10 @@ body {
   padding: 0.3rem 1.2rem;
   margin-left: 0.5rem;
   white-space: nowrap; /* mobile collapse buttons align */
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .navbar-custom .btn-outline-turquoise:hover {
@@ -107,6 +112,9 @@ body {
 /* Hamburger menu toggler */
 .navbar-custom .navbar-toggler {
   border-color: #40e0d0;
+  height: 38px;
+  padding: 0.25rem 0.5rem;
+  align-items: center;
   order: 3; /* flex order within container */
   margin-left: auto; /* push to the right */
   margin-left: 0.5rem; /* tiny gap from theme button */
@@ -114,6 +122,8 @@ body {
 
 .navbar-custom .navbar-toggler-icon {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(2, 102, 92, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  width: 1.2em;
+  height: 1.2em;
 }
 
 /* ========== NAVBAR DARK MODE OVERRIDES ========== */
@@ -224,12 +234,13 @@ body {
 
 /* Hover effects for profile picture */
 .profile-pic-wrapper:hover {
+  transform: scale(1.2);
   border-radius: 60% 40% 40% 60% / 60% 50% 50% 40%;
   box-shadow: 0 28px 38px -8px #1d6b5e;
 }
 
 .profile-pic-wrapper:hover img {
-  transform: scale(1.06) rotate(1deg);
+  transform: scale(1.05) rotate(1deg);
   filter: brightness(1.02) contrast(1.02);
 }
 
@@ -300,12 +311,26 @@ body {
 /* Infinite scrolling carousel for technology display */
 
 .carousel {
-  margin: 100px auto;
+  margin: 60px auto 40px;
   width: 90%;
   overflow: hidden;
   display: flex;
   position: relative;
   border-radius: 1rem;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
 }
 
 .carousel::-webkit-scrollbar {
@@ -317,15 +342,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1em;
+  gap: 3em;
   flex-shrink: 0;
-  animation: scroll 20s linear infinite; /* Infinite scroll animation */
-  padding: 0.5em 0;
+  animation: scroll 25s linear infinite; /* Infinite scroll animation */
+  padding: 1em 0;
 }
 
 /* Gap between the two groups for seamless transition */
 .group:first-child {
-  margin-right: 1em;
+  margin-right: 1.5em;
 }
 
 /* Individual technology cards */
@@ -334,15 +359,38 @@ body {
   flex: 0 0 5em;
   height: 5em;
   padding: 0; /* Reset padding, using aspect-ratio instead */
-  background: turquoise;
+  background: transparent !important;
   font-size: 3em;
   border-radius: 0.5em;
   align-items: center;
   justify-content: center;
   color: #015f56;
   font-weight: bold;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: none !important;
   aspect-ratio: 1/1; /* Ensures perfect square cards */
+  border: none !important;
+  transition: all 0.3s ease;
+  margin: 0.2em;
+}
+.tech:hover {
+  transform: scale(1.15);
+  z-index: 10;
+}
+.tech img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+  filter: drop-shadow(0 4px 8px rgba(64, 224, 208, 0.3));
+}
+.tech:hover img {
+  transform: scale(1.04);
+  filter: drop-shadow(0 8px 16px rgba(64, 224, 208, 0.5));
+}
+/* Ensure colored icons display properly */
+.tech .devicon-nextjs-original,
+.tech .devicon-express-original {
+  color: #015f56; /* Dark turquoise for dark icons */
 }
 
 /* Carousel animation keyframes */
@@ -358,15 +406,38 @@ body {
 
 /* Dark mode for carousel */
 .dark-mode .tech {
-  background: #1f6f65;
   color: #e0f2e9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
-
+.dark-mode .tech img {
+  filter: drop-shadow(0 4px 8px rgba(102, 205, 170, 0.3));
+}
+.dark-mode .tech:hover {
+  filter: drop-shadow(0 8px 16px rgba(102, 205, 170, 0.5));
+}
+.dark-mode .tech .devicon-nextjs-original,
+.dark-mode .tech .devicon-express-original {
+  color: #e0f2e9; /* Light mint for dark mode */
+}
 /* Pause animation on hover for better UX */
 .carousel:hover .group {
   animation-play-state: paused;
 }
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .group {
+    gap: 2.5em; /* Slightly reduced for mobile but still spacious */
+    padding: 0.8em 0;
+  }
+
+  .tech {
+    font-size: 2.5em;
+    margin: 0.15em;
+  }
+}
+
 /* ========== WORK EXPERIENCE SECTION ========== */
 /* All custom styling moved to CSS classes - Bootstrap classes used where available */
 
