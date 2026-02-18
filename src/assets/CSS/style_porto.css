@@ -1,15 +1,43 @@
 /* ========== GLOBAL / COMMON CONFIGURATION ========== */
 /* Used across multiple sections - base styles, variables, and utility classes */
+/* Add/modify these at the top of your CSS */
 
 body {
   padding-top: 76px; /* prevent content hiding behind fixed navbar */
+  /* ========== ADDED: Proper background that adapts to theme ========== */
+  background: linear-gradient(135deg, #f8fffe 0%, #f0faf5 100%) !important;
+  min-height: 100vh;
+  transition: background 0.3s ease;
 }
 
-/* Dark mode utility (applied to body) */
-.dark-mode {
-  /* Base dark mode variables can go here */
+.dark-mode body {
+  background: linear-gradient(135deg, #0a2a24 0%, #1a3d35 100%) !important;
+  color: #e0f2e9;
 }
 
+/* Optional: Add a subtle overlay pattern */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(
+    circle at 10% 20%,
+    rgba(64, 224, 208, 0.03) 0%,
+    transparent 30%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+.dark-mode body::before {
+  background-image: radial-gradient(
+    circle at 10% 20%,
+    rgba(102, 205, 170, 0.05) 0%,
+    transparent 30%
+  );
+}
 /* Turquoise utility classes - used in navbar, badges, carousel */
 .bg-turquoise {
   background-color: #40e0d0 !important;
@@ -1085,6 +1113,47 @@ body {
 .dark-mode .footer-heart {
   color: #ff6b6b;
 }
+/* Social media icons */
+.social-links {
+  margin-bottom: 1rem;
+}
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(64, 224, 208, 0.1);
+  color: #015f56;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(64, 224, 208, 0.2);
+  text-decoration: none;
+}
+
+.social-icon:hover {
+  background: #40e0d0;
+  color: #01443d;
+  transform: translateY(-3px);
+  border-color: #40e0d0;
+  box-shadow: 0 5px 15px rgba(64, 224, 208, 0.3);
+}
+
+/* Dark mode */
+.dark-mode .social-icon {
+  background: rgba(30, 70, 60, 0.3);
+  color: #e0f2e9;
+  border-color: rgba(102, 205, 170, 0.2);
+}
+
+.dark-mode .social-icon:hover {
+  background: #66cdaa;
+  color: #01443d;
+  border-color: #66cdaa;
+  box-shadow: 0 5px 15px rgba(102, 205, 170, 0.3);
+}
 
 @keyframes heartBeat {
   0%,
@@ -1160,6 +1229,15 @@ body {
 
   .footer-copyright {
     font-size: 0.9rem !important;
+  }
+  .social-links {
+    gap: 0.75rem !important;
+  }
+
+  .social-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
   }
 }
 
