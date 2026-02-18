@@ -39,3 +39,20 @@
     picWrapper.style.cursor = "default";
   }
 })();
+// ========== NAVIGATION FOR PORTFOLIO ========== //
+function navigateToSection(sectionId) {
+  const targetSection = document.getElementById(sectionId);
+  if (targetSection) {
+    // Close mobile menu if open
+    const navbarCollapse = document.getElementById("navbarMain");
+    if (navbarCollapse.classList.contains("show")) {
+      document.querySelector(".navbar-toggler").click();
+    }
+
+    // Smooth scroll to section
+    window.scrollTo({
+      top: targetSection.offsetTop - 80,
+      behavior: "smooth",
+    });
+  }
+}

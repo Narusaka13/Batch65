@@ -25,7 +25,7 @@
     <nav class="navbar navbar-expand-md navbar-custom fixed-top py-2">
       <div class="container-fluid px-4">
         <!-- left side: brand SE (you can also put logo) -->
-        <a class="navbar-brand fw-bold" href="#">
+        <a class="navbar-brand fw-bold" href="#" onclick="navigateTo('home')">
           <div
             class="position-relative, rounded"
             style="width: 50px; height: 40px; overflow: hidden;"
@@ -74,15 +74,21 @@
         <div class="collapse navbar-collapse" id="navbarMain">
           <!-- main menu – centered on desktop, stacked on mobile -->
           <ul class="navbar-nav ms-auto mb-2 mb-md-0 text-center">
-            <li class="nav-item"><a class="nav-link" href="#"><i
-                  class="bi bi-stack me-1"
-                ></i>Tech&nbsp;Stack</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i
-                  class="bi bi-briefcase me-1"
-                ></i>Experience</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i
-                  class="bi bi-kanban me-1"
-                ></i>Projects</a></li>
+            <li class="nav-item"><a
+                class="nav-link"
+                href="#"
+                onclick="navigateToSection('tech'); return false;"
+              ><i class="bi bi-stack me-1"></i>Tech&nbsp;Stack</a></li>
+            <li class="nav-item"><a
+                class="nav-link"
+                href="#"
+                onclick="navigateToSection('experience'); return false;"
+              ><i class="bi bi-briefcase me-1"></i>Experience</a></li>
+            <li class="nav-item"><a
+                class="nav-link"
+                href="#"
+                onclick="navigateToSection('projects'); return false;"
+              ><i class="bi bi-kanban me-1"></i>Projects</a></li>
           </ul>
           <!-- mobile-only action buttons (Let's Talk + Download CV) visible inside collapse -->
           <div class="d-md-none text-center mt-3 pb-2">
@@ -100,7 +106,7 @@
       <!-- /container-fluid -->
     </nav>
     <!-- ========== MAIN INTERFACE SECTION ========== -->
-    <main class="container mt-4">
+    <main id="home" class="container mt-4">
       <!-- row with picture and intro: using Bootstrap ordering: pic first on mobile, side by side on lg+ -->
       <div class="row profile-row align-items-center g-5">
         <!-- Picture column (fixed size placeholder) - order first on small, left on large -->
@@ -141,7 +147,8 @@
                 style="color: #40e0d0;"
               ></i>
               Jatinegara, Jakarta, Indonesia</span>
-            <span class="mx-2">•</span>
+          </div>
+          <div class="location-badge my-4 d-inline-flex gap-3 flex-wrap">
             <span><i
                 class="bi bi-check-circle-fill me-1"
                 style="color: #2e8b57;"
@@ -164,7 +171,7 @@
       </div>
     </main>
     <!-- ========== TECH STACK CAROUSEL SECTION ========== -->
-    <main class="container my-5">
+    <main id="tech" class="container my-5">
       <!-- Section title - exactly like Work Experiences and My Projects sections -->
       <h2
         class="work-section-title display-6 fw-semibold mb-4 pb-2 border-bottom"
@@ -302,7 +309,7 @@
       </div>
     </main>
     <!-- ========== WORK EXPERIENCE SECTION ========== -->
-    <main class="container my-5">
+    <main id="experience" class="container my-5">
       <!-- Section title -->
       <h2
         class="work-section-title display-6 fw-semibold mb-4 pb-2 border-bottom"
@@ -314,19 +321,31 @@
       <div class="card experience-card border-0 mb-4 overflow-hidden">
         <div class="card-body p-4 p-md-5">
           <!-- Header with date badge -->
-          <div
-            class="d-flex flex-wrap justify-content-between align-items-baseline gap-3 mb-2"
-          >
-            <h3 class="experience-role h4 fw-semibold mb-0">Mentor Full Stack
-              Web Developer</h3>
-            <span class="experience-date badge px-3 py-2">Oct 2022 – Present</span>
+          <div class="d-flex gap-3 mb-3">
+            <!-- Small picture wrapper -->
+            <div class="experience-image-wrapper">
+              <img
+                src="../assets/Uploads/projects/db/image1771171125751.png"
+                alt="DumboWays Indonesia"
+                class="experience-image"
+              />
+            </div>
+            <!-- Title and company (stacked) -->
+            <div class="flex-grow-1">
+              <!-- Header with date badge -->
+              <div
+                class="d-flex flex-wrap justify-content-between align-items-baseline gap-3 mb-2"
+              >
+                <h3 class="experience-role h4 fw-semibold mb-0">Mentor Full
+                  Stack Web Developer</h3>
+                <span class="experience-date badge px-3 py-2">Oct 2022 – Present</span>
+              </div>
+              <!-- Company name -->
+              <h4 class="experience-company h5 mb-0">
+                DumboWays Indonesia
+              </h4>
+            </div>
           </div>
-
-          <!-- Company name -->
-          <h4 class="experience-company h5 mb-4 pb-2 border-bottom">
-            DumboWays Indonesia
-          </h4>
-
           <!-- Experience list -->
           <ul class="experience-list list-unstyled mb-4">
             <li class="experience-list-item mb-3 d-flex">
@@ -370,18 +389,35 @@
       <!-- Experience Card 2 -->
       <div class="card experience-card border-0 overflow-hidden">
         <div class="card-body p-4 p-md-5">
-          <div
-            class="d-flex flex-wrap justify-content-between align-items-baseline gap-3 mb-2"
-          >
-            <h3 class="experience-role h4 fw-semibold mb-0">Mentor Full Stack
-              Web Developer</h3>
-            <span class="experience-date badge px-3 py-2">Oct 2023 – Mar 2024</span>
+          <div class="d-flex gap-3 mb-3">
+            <!-- Small picture wrapper -->
+            <div class="experience-image-wrapper">
+              <img
+                src="../assets/Uploads/projects/db/image1771173017924.png"
+                alt="DumboWays Indonesia"
+                class="experience-image"
+                onerror="this.src='https://via.placeholder.com/60x60/40e0d0/015f56?text=DW'"
+              />
+            </div>
+
+            <!-- Title and company (stacked) -->
+            <div class="flex-grow-1">
+              <!-- Header with date badge -->
+              <div
+                class="d-flex flex-wrap justify-content-between align-items-baseline gap-3 mb-2"
+              >
+                <h3 class="experience-role h4 fw-semibold mb-0">Mentor Full
+                  Stack Web Developer</h3>
+                <span class="experience-date badge px-3 py-2">Oct 2023 – Mar
+                  2024</span>
+              </div>
+
+              <!-- Company name -->
+              <h4 class="experience-company h5 mb-0">
+                DumboWays Indonesia
+              </h4>
+            </div>
           </div>
-
-          <h4 class="experience-company h5 mb-4 pb-2 border-bottom">
-            DumboWays Indonesia
-          </h4>
-
           <ul class="experience-list list-unstyled mb-4">
             <li class="experience-list-item mb-3 d-flex">
               <span class="experience-bullet me-3">▹</span>
@@ -421,7 +457,7 @@
       </div>
     </main>
     <!-- ========== MY PROJECTS SECTION ========== -->
-    <main class="container my-5">
+    <main id="projects" class="container my-5">
       <!-- Section title -->
       <h2
         class="projects-section-title display-6 fw-semibold mb-4 pb-2 border-bottom"
@@ -431,8 +467,16 @@
 
       <div class="row g-4">
         <!-- Project Card 1 - Fakturly -->
-        <div class="col-md-6">
+        <div class="col-12 col-lg-6">
           <div class="card project-card border-0 h-100 overflow-hidden">
+            <!-- Project image placeholder -->
+            <div class="project-image-wrapper">
+              <img
+                src="../assets/Uploads/Pic/proPic1770782828108.png"
+                alt="Fakturly Project"
+                class="project-image"
+              />
+            </div>
             <div class="card-body p-4 p-xl-5">
               <!-- Project title -->
               <h3 class="project-title h3 fw-semibold mb-3">Fakturly</h3>
@@ -474,8 +518,16 @@
         </div>
 
         <!-- Project Card 2 - Nimalis -->
-        <div class="col-md-6">
+        <div class="col-12 col-lg-6">
           <div class="card project-card border-0 h-100 overflow-hidden">
+            <!-- Project image placeholder -->
+            <div class="project-image-wrapper">
+              <img
+                src="../assets/Uploads/Pic/proPic1770794795536.png"
+                alt="Fakturly Project"
+                class="project-image"
+              />
+            </div>
             <div class="card-body p-4 p-xl-5">
               <!-- Project title -->
               <h3 class="project-title h3 fw-semibold mb-3">Nimalis</h3>
@@ -549,7 +601,7 @@
               </span>
               <span
                 class="closing-contact-text fs-5"
-              >suryaelidanto@gmail.com</span>
+              >sal110520ram@gmail.com</span>
             </a>
 
             <!-- Phone -->
@@ -560,7 +612,7 @@
               <span class="closing-contact-icon">
                 <i class="bi bi-telephone-fill fs-4"></i>
               </span>
-              <span class="closing-contact-text fs-5">+62 878-776-18724</span>
+              <span class="closing-contact-text fs-5">+62 878-3905-6763</span>
             </a>
           </div>
         </div>
@@ -572,11 +624,10 @@
       <div class="container text-center">
         <!-- Copyright with heart -->
         <p class="footer-copyright mb-0 fs-6">
-          © 2025 Designed and coded with
+          © 2026 Designed and coded by Narusaka
           <span class="footer-heart">
             <i class="bi bi-heart-fill"></i>
           </span>
-          by Surya Elidanto
         </p>
       </div>
     </footer>
